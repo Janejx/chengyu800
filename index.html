@@ -12,245 +12,177 @@
 <title>高频成语800词 · 交互记忆系统</title>
 <style>
 :root{
-  --g900:#14532d; --g800:#166534; --g700:#15803d; --g600:#16a34a;
-  --g500:#22c55e; --g400:#4ade80; --g100:#dcfce7; --g50:#f0fdf4;
-  --red:#dc2626; --red-bg:#fef2f2;
-  --ink:#1f2937; --muted:#6b7280; --line:#e5e7eb; --card:#ffffff;
-  --safe-t:env(safe-area-inset-top,0px);
-  --safe-b:env(safe-area-inset-bottom,0px);
-  --safe-l:env(safe-area-inset-left,0px);
-  --safe-r:env(safe-area-inset-right,0px);
+  --g900:#14532d;--g800:#166534;--g700:#15803d;--g600:#16a34a;
+  --g500:#22c55e;--g400:#4ade80;--g100:#dcfce7;--g50:#f0fdf4;
+  --red:#dc2626;--red-bg:#fef2f2;
+  --ink:#1f2937;--muted:#6b7280;--line:#e5e7eb;--card:#fff;
+  --safe-t:env(safe-area-inset-top,0px);--safe-b:env(safe-area-inset-bottom,0px);
+  --safe-l:env(safe-area-inset-left,0px);--safe-r:env(safe-area-inset-right,0px);
 }
-*,*::before,*::after{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-html{-webkit-text-size-adjust:100%;text-size-adjust:100%;touch-action:manipulation;}
-body{
-  margin:0;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
-  background:linear-gradient(165deg,#f0fdf4 0%,#ecfdf5 45%,#f7fee7 100%);
-  background-attachment:fixed;min-height:100vh;min-height:100dvh;
-  color:var(--ink);line-height:1.6;overflow-x:hidden;touch-action:manipulation;
-  -webkit-font-smoothing:antialiased;
-}
-.app{
-  max-width:880px;margin:0 auto;
-  padding:calc(16px + var(--safe-t)) calc(16px + var(--safe-r)) calc(52px + var(--safe-b)) calc(16px + var(--safe-l));
-}
-.hero{
-  background:linear-gradient(135deg,#166534,#16a34a 55%,#4ade80);
-  color:#fff;border-radius:20px;padding:22px 24px;margin-bottom:16px;
-  box-shadow:0 10px 30px -12px rgba(22,101,52,.55);position:relative;overflow:hidden;
-}
-.hero::after{content:"";position:absolute;right:-40px;top:-40px;width:160px;height:160px;background:rgba(255,255,255,.12);border-radius:50%;}
-.hero h1{margin:0 0 4px;font-size:clamp(18px,5vw,22px);letter-spacing:.5px;}
-.hero p{margin:0;font-size:13px;opacity:.92;}
-
-.screen{display:none;animation:fade .28s ease;}
-.screen.active{display:block;}
-@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
-@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms !important;transition-duration:.01ms !important;}}
-
-.card{
-  background:var(--card);border-radius:18px;padding:20px;margin-bottom:14px;
-  box-shadow:0 4px 20px -8px rgba(22,101,52,.18);
-  border:1px solid rgba(22,163,74,.10);
-}
-.card-title{margin:0 0 14px;font-size:15px;color:var(--g800);font-weight:700;display:flex;align-items:center;gap:8px;}
-.card-title::before{content:"";width:4px;height:16px;border-radius:3px;background:var(--g500);}
-
-.mode-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;}
-.mode-btn{
-  display:flex;flex-direction:column;gap:4px;text-align:left;
-  background:#fafafa;border:2px solid var(--line);border-radius:14px;
-  padding:16px;cursor:pointer;transition:.18s;font-family:inherit;min-height:88px;
-  -webkit-touch-callout:none;touch-action:manipulation;
-}
-.mode-btn:hover{border-color:var(--g400);background:var(--g50);}
-.mode-btn:active{transform:scale(.985);}
-.mode-btn.active{border-color:var(--g600);background:var(--g50);box-shadow:0 0 0 3px rgba(34,197,94,.14);}
-.m-emoji{font-size:20px;line-height:1;}
-.m-title{font-size:15px;font-weight:700;color:var(--g900);}
-.m-desc{font-size:12px;color:var(--muted);line-height:1.45;}
-
-.chips{display:flex;flex-wrap:wrap;gap:8px;max-height:210px;overflow-y:auto;padding:4px 2px;margin-bottom:12px;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;}
-.chips::-webkit-scrollbar{width:6px;}
-.chips::-webkit-scrollbar-thumb{background:var(--g400);border-radius:4px;}
-.chip{
-  border:1px solid var(--line);background:#fff;color:#4b5563;border-radius:999px;
-  padding:8px 15px;font-size:13px;cursor:pointer;transition:.16s;font-family:inherit;
-  white-space:nowrap;min-height:38px;display:inline-flex;align-items:center;
-  -webkit-touch-callout:none;touch-action:manipulation;
-}
-.chip:active{transform:scale(.96);}
-.chip:hover{border-color:var(--g400);color:var(--g700);}
-.chip.on{background:var(--g600);border-color:var(--g600);color:#fff;font-weight:600;}
-.chip.all.on{background:var(--g800);border-color:var(--g800);}
-
-.count-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px;}
-.count-chip{
-  flex:1 1 60px;min-width:60px;min-height:48px;display:flex;align-items:center;justify-content:center;
-  padding:10px 4px;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:pointer;
-  font-size:14px;font-weight:600;color:#4b5563;transition:.16s;font-family:inherit;
-  -webkit-touch-callout:none;touch-action:manipulation;
-}
-.count-chip:active{transform:scale(.96);}
-.count-chip:hover{border-color:var(--g400);}
-.count-chip.on{background:var(--g600);border-color:var(--g600);color:#fff;}
-
-.primary-btn{
-  width:100%;border:none;border-radius:14px;padding:16px;font-size:16px;font-weight:700;
-  color:#fff;cursor:pointer;font-family:inherit;min-height:54px;
-  background:linear-gradient(135deg,#16a34a,#22c55e);
-  box-shadow:0 8px 20px -8px rgba(22,163,74,.7);transition:.18s;
-  -webkit-touch-callout:none;touch-action:manipulation;
-}
-.primary-btn:hover{transform:translateY(-1px);box-shadow:0 12px 24px -8px rgba(22,163,74,.75);}
-.primary-btn:active{transform:translateY(0) scale(.99);}
-.primary-btn:disabled{opacity:.55;cursor:default;transform:none;}
-
-.ghost-btn{
-  border:1.5px solid var(--line);background:#fff;color:#4b5563;border-radius:12px;
-  padding:10px 14px;font-size:13px;cursor:pointer;font-family:inherit;transition:.16s;
-  min-height:42px;display:inline-flex;align-items:center;justify-content:center;
-  -webkit-touch-callout:none;touch-action:manipulation;
-}
-.ghost-btn:active{transform:scale(.97);}
-.ghost-btn:hover{border-color:var(--g400);color:var(--g700);}
-.row{display:flex;gap:10px;margin-top:14px;}
-.row .primary-btn{flex:1;}
-
-.quiz-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-size:13px;color:var(--muted);gap:10px;}
-.quiz-bar .left{font-weight:700;color:var(--g800);font-size:14px;white-space:nowrap;}
-.quiz-bar .right{display:flex;align-items:center;gap:10px;}
-.stat{font-weight:700;font-size:14px;white-space:nowrap;}
-.stat.ok{color:var(--g600);}
-.stat.no{color:var(--red);}
-.progress{height:7px;background:#e5ebe6;border-radius:99px;overflow:hidden;margin-bottom:16px;}
-.progress-fill{height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,#4ade80,#16a34a);transition:width .3s ease;}
-
-.q-tag{display:inline-block;font-size:12px;font-weight:700;color:var(--g700);background:var(--g100);padding:5px 12px;border-radius:99px;margin-bottom:12px;}
-.q-text{font-size:clamp(17px,5vw,19px);font-weight:700;color:var(--g900);line-height:1.65;letter-spacing:.3px;word-break:break-word;}
-.q-text.meaning{font-size:clamp(15px,4.4vw,16px);font-weight:600;color:#374151;line-height:1.85;}
-
-.options{display:flex;flex-direction:column;gap:10px;}
-.opt{
-  display:flex;gap:12px;align-items:flex-start;text-align:left;
-  background:#fff;border:2px solid var(--line);border-radius:14px;padding:14px 15px;
-  cursor:pointer;transition:.16s;font-family:inherit;
-  font-size:clamp(14.5px,4.2vw,15px);color:#374151;line-height:1.6;min-height:56px;
-  -webkit-touch-callout:none;touch-action:manipulation;
-}
-.opt:hover:not(.locked){border-color:var(--g400);background:var(--g50);}
-.opt:active:not(.locked){transform:scale(.99);}
-.opt-key{flex:0 0 26px;height:26px;border-radius:8px;background:#f3f4f6;color:#6b7280;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;transition:.16s;margin-top:1px;}
-.opt.correct{border-color:var(--g600);background:var(--g50);}
-.opt.correct .opt-key{background:var(--g600);color:#fff;}
-.opt.wrong{border-color:var(--red);background:var(--red-bg);}
-.opt.wrong .opt-key{background:var(--red);color:#fff;}
-.opt.locked{cursor:default;}
-.opt-text{flex:1;word-break:break-word;}
-.opt-text.small{font-size:clamp(14px,4vw,14.5px);line-height:1.7;}
-
-.feedback{margin-top:14px;border-radius:14px;padding:14px 16px;font-size:14px;line-height:1.7;display:none;animation:fade .25s ease;}
-.feedback.show{display:block;}
-.feedback.ok{background:var(--g50);border:1px solid #bbf7d0;color:#166534;}
-.feedback.no{background:var(--red-bg);border:1px solid #fecaca;color:#991b1b;}
-.fb-title{font-weight:800;margin-bottom:6px;font-size:14.5px;}
-.fb-body{color:#374151;font-size:14px;word-break:break-word;}
-.fb-body b{color:var(--g800);}
-.hidden{display:none !important;}
-#nextBtn{margin-top:14px;}
-
-.result-head{text-align:center;padding:6px 0 16px;}
-.score-big{font-size:clamp(38px,12vw,46px);font-weight:800;color:var(--g700);line-height:1.1;}
-.score-sub{font-size:14px;color:var(--muted);margin-top:6px;}
-.result-msg{margin-top:12px;font-size:15px;font-weight:600;color:var(--g800);}
-.wrong-list{margin-top:8px;max-height:42vh;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;}
-.wrong-list::-webkit-scrollbar{width:6px;}
-.wrong-list::-webkit-scrollbar-thumb{background:#d1d5db;border-radius:4px;}
-.wrong-item{background:#fafafa;border-left:3px solid var(--red);border-radius:0 10px 10px 0;padding:10px 14px;margin-bottom:8px;font-size:13.5px;line-height:1.65;word-break:break-word;}
-.wrong-item b{color:var(--g800);font-size:14.5px;}
-.wrong-item span{color:#4b5563;}
-.wrong-cat{font-size:11px;color:#15803d;background:var(--g100);padding:1px 8px;border-radius:99px;font-weight:600;}
-
-.search-box{width:100%;border:2px solid var(--line);border-radius:12px;padding:13px 16px;font-size:16px;font-family:inherit;outline:none;transition:.16s;margin-bottom:12px;background:#fff;color:var(--ink);}
-.search-box:focus{border-color:var(--g500);box-shadow:0 0 0 3px rgba(34,197,94,.13);}
-.browse-count{font-size:12.5px;color:var(--muted);margin-bottom:10px;}
-.browse-list{max-height:60vh;overflow-y:auto;padding-right:4px;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;}
-.browse-list::-webkit-scrollbar{width:6px;}
-.browse-list::-webkit-scrollbar-thumb{background:#d1d5db;border-radius:4px;}
-.b-item{padding:11px 4px;border-bottom:1px dashed #eef0ee;}
-.b-item:last-child{border-bottom:none;}
-.b-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:3px;}
-.b-word{font-weight:800;color:var(--g800);font-size:15.5px;}
-.b-cat{font-size:11px;color:#15803d;background:var(--g100);padding:2px 8px;border-radius:99px;font-weight:600;}
-.b-def{font-size:13.5px;color:#4b5563;line-height:1.65;word-break:break-word;}
-.empty{text-align:center;color:var(--muted);padding:40px 0;font-size:14px;}
-
-/* ===== 错题本 ===== */
-.wrong-detail-list{max-height:64vh;overflow-y:auto;padding-right:4px;margin-top:6px;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;}
-.wrong-detail-list::-webkit-scrollbar{width:6px;}
-.wrong-detail-list::-webkit-scrollbar-thumb{background:#d1d5db;border-radius:4px;}
-.wrong-detail-item{
-  border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px;
-  background:#fafafa;
-}
-.wrong-detail-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px;}
-.wrong-detail-index{
-  display:inline-flex;align-items:center;justify-content:center;
-  width:22px;height:22px;border-radius:50%;background:var(--red);color:#fff;
-  font-size:12px;font-weight:800;flex:0 0 22px;
-}
-.wrong-detail-word{font-weight:800;color:var(--g800);font-size:16px;word-break:break-word;}
-.wrong-detail-cat{font-size:11px;color:#15803d;background:var(--g100);padding:2px 8px;border-radius:99px;font-weight:600;}
-.wrong-detail-tag{font-size:11px;background:#fee2e2;color:#b91c1c;padding:2px 8px;border-radius:99px;font-weight:600;}
-.wrong-detail-question{
-  font-size:13.5px;color:#1d4ed8;margin-bottom:10px;padding:10px 12px;
-  background:#eff6ff;border-radius:10px;border-left:3px solid #3b82f6;
-  line-height:1.7;word-break:break-word;
-}
-.wrong-detail-question em{font-style:normal;font-weight:800;font-size:11px;margin-right:6px;letter-spacing:.5px;text-transform:uppercase;}
-.wrong-detail-def{
-  font-size:13.5px;color:#374151;line-height:1.7;margin-bottom:10px;
-  padding:10px 12px;background:#fff;border-radius:10px;border:1px dashed #d1d5db;
-  word-break:break-word;
-}
-.wrong-detail-def em{font-style:normal;font-weight:800;font-size:11px;color:var(--g700);margin-right:6px;letter-spacing:.5px;}
-.wrong-detail-row{font-size:13.5px;line-height:1.7;margin-top:6px;padding:9px 12px;border-radius:8px;word-break:break-word;}
-.wrong-detail-row.user{background:#fef2f2;color:#991b1b;border-left:3px solid #dc2626;}
-.wrong-detail-row.correct{background:#f0fdf4;color:#166534;border-left:3px solid #16a34a;}
-.wrong-detail-row b{font-weight:800;margin-right:4px;}
-
+*,*::before,*::after{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;touch-action:manipulation}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;background:linear-gradient(165deg,#f0fdf4 0%,#ecfdf5 45%,#f7fee7 100%);background-attachment:fixed;min-height:100vh;min-height:100dvh;color:var(--ink);line-height:1.6;overflow-x:hidden;touch-action:manipulation;-webkit-font-smoothing:antialiased}
+.app{max-width:880px;margin:0 auto;padding:calc(16px + var(--safe-t)) calc(16px + var(--safe-r)) calc(52px + var(--safe-b)) calc(16px + var(--safe-l))}
+.hero{background:linear-gradient(135deg,#166534,#16a34a 55%,#4ade80);color:#fff;border-radius:20px;padding:22px 24px;margin-bottom:16px;box-shadow:0 10px 30px -12px rgba(22,101,52,.55);position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-40px;top:-40px;width:160px;height:160px;background:rgba(255,255,255,.12);border-radius:50%}
+.hero h1{margin:0 0 4px;font-size:clamp(18px,5vw,22px);letter-spacing:.5px}
+.hero p{margin:0;font-size:13px;opacity:.92}
+.screen{display:none;animation:fade .28s ease}
+.screen.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms !important;transition-duration:.01ms !important}}
+.card{background:var(--card);border-radius:18px;padding:20px;margin-bottom:14px;box-shadow:0 4px 20px -8px rgba(22,101,52,.18);border:1px solid rgba(22,163,74,.10)}
+.card-title{margin:0 0 14px;font-size:15px;color:var(--g800);font-weight:700;display:flex;align-items:center;gap:8px}
+.card-title::before{content:"";width:4px;height:16px;border-radius:3px;background:var(--g500)}
+.mode-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.mode-btn{display:flex;flex-direction:column;gap:4px;text-align:left;background:#fafafa;border:2px solid var(--line);border-radius:14px;padding:16px;cursor:pointer;transition:.18s;font-family:inherit;min-height:88px;-webkit-touch-callout:none;touch-action:manipulation}
+.mode-btn:hover{border-color:var(--g400);background:var(--g50)}
+.mode-btn:active{transform:scale(.985)}
+.mode-btn.active{border-color:var(--g600);background:var(--g50);box-shadow:0 0 0 3px rgba(34,197,94,.14)}
+.m-emoji{font-size:20px;line-height:1}
+.m-title{font-size:15px;font-weight:700;color:var(--g900)}
+.m-desc{font-size:12px;color:var(--muted);line-height:1.45}
+.chips{display:flex;flex-wrap:wrap;gap:8px;max-height:210px;overflow-y:auto;padding:4px 2px;margin-bottom:12px;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.chips::-webkit-scrollbar{width:6px}
+.chips::-webkit-scrollbar-thumb{background:var(--g400);border-radius:4px}
+.chip{border:1px solid var(--line);background:#fff;color:#4b5563;border-radius:999px;padding:8px 15px;font-size:13px;cursor:pointer;transition:.16s;font-family:inherit;white-space:nowrap;min-height:38px;display:inline-flex;align-items:center;-webkit-touch-callout:none;touch-action:manipulation}
+.chip:active{transform:scale(.96)}
+.chip:hover{border-color:var(--g400);color:var(--g700)}
+.chip.on{background:var(--g600);border-color:var(--g600);color:#fff;font-weight:600}
+.chip.all.on{background:var(--g800);border-color:var(--g800)}
+.count-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px}
+.count-chip{flex:1 1 60px;min-width:60px;min-height:48px;display:flex;align-items:center;justify-content:center;padding:10px 4px;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:pointer;font-size:14px;font-weight:600;color:#4b5563;transition:.16s;font-family:inherit;-webkit-touch-callout:none;touch-action:manipulation}
+.count-chip:active{transform:scale(.96)}
+.count-chip:hover{border-color:var(--g400)}
+.count-chip.on{background:var(--g600);border-color:var(--g600);color:#fff}
+.primary-btn{width:100%;border:none;border-radius:14px;padding:16px;font-size:16px;font-weight:700;color:#fff;cursor:pointer;font-family:inherit;min-height:54px;background:linear-gradient(135deg,#16a34a,#22c55e);box-shadow:0 8px 20px -8px rgba(22,163,74,.7);transition:.18s;-webkit-touch-callout:none;touch-action:manipulation}
+.primary-btn:hover{transform:translateY(-1px);box-shadow:0 12px 24px -8px rgba(22,163,74,.75)}
+.primary-btn:active{transform:translateY(0) scale(.99)}
+.ghost-btn{border:1.5px solid var(--line);background:#fff;color:#4b5563;border-radius:12px;padding:10px 14px;font-size:13px;cursor:pointer;font-family:inherit;transition:.16s;min-height:42px;display:inline-flex;align-items:center;justify-content:center;gap:5px;-webkit-touch-callout:none;touch-action:manipulation;font-weight:600}
+.ghost-btn:active{transform:scale(.97)}
+.ghost-btn:hover{border-color:var(--g400);color:var(--g700)}
+.ghost-btn.accent{background:var(--g50);border-color:var(--g400);color:var(--g700)}
+.ghost-btn.accent:hover{background:var(--g100)}
+.row{display:flex;gap:10px;margin-top:14px}
+.row .primary-btn{flex:1}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.toolbar .ghost-btn{flex:1 1 120px;min-height:44px;font-size:13px}
+.quiz-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-size:13px;color:var(--muted);gap:10px}
+.quiz-bar .left{font-weight:700;color:var(--g800);font-size:14px;white-space:nowrap}
+.quiz-bar .right{display:flex;align-items:center;gap:10px}
+.stat{font-weight:700;font-size:14px;white-space:nowrap}
+.stat.ok{color:var(--g600)}
+.stat.no{color:var(--red)}
+.progress{height:7px;background:#e5ebe6;border-radius:99px;overflow:hidden;margin-bottom:16px}
+.progress-fill{height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,#4ade80,#16a34a);transition:width .3s ease}
+.q-tag{display:inline-block;font-size:12px;font-weight:700;color:var(--g700);background:var(--g100);padding:5px 12px;border-radius:99px;margin-bottom:12px}
+.q-text{font-size:clamp(17px,5vw,19px);font-weight:700;color:var(--g900);line-height:1.65;letter-spacing:.3px;word-break:break-word}
+.q-text.meaning{font-size:clamp(15px,4.4vw,16px);font-weight:600;color:#374151;line-height:1.85}
+.options{display:flex;flex-direction:column;gap:10px}
+.opt{display:flex;gap:12px;align-items:flex-start;text-align:left;background:#fff;border:2px solid var(--line);border-radius:14px;padding:14px 15px;cursor:pointer;transition:.16s;font-family:inherit;font-size:clamp(14.5px,4.2vw,15px);color:#374151;line-height:1.6;min-height:56px;-webkit-touch-callout:none;touch-action:manipulation}
+.opt:hover:not(.locked){border-color:var(--g400);background:var(--g50)}
+.opt:active:not(.locked){transform:scale(.99)}
+.opt-key{flex:0 0 26px;height:26px;border-radius:8px;background:#f3f4f6;color:#6b7280;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;transition:.16s;margin-top:1px}
+.opt.correct{border-color:var(--g600);background:var(--g50)}
+.opt.correct .opt-key{background:var(--g600);color:#fff}
+.opt.wrong{border-color:var(--red);background:var(--red-bg)}
+.opt.wrong .opt-key{background:var(--red);color:#fff}
+.opt.locked{cursor:default}
+.opt-text{flex:1;word-break:break-word}
+.opt-text.small{font-size:clamp(14px,4vw,14.5px);line-height:1.7}
+.feedback{margin-top:14px;border-radius:14px;padding:14px 16px;font-size:14px;line-height:1.7;display:none;animation:fade .25s ease}
+.feedback.show{display:block}
+.feedback.ok{background:var(--g50);border:1px solid #bbf7d0;color:#166534}
+.feedback.no{background:var(--red-bg);border:1px solid #fecaca;color:#991b1b}
+.fb-title{font-weight:800;margin-bottom:6px;font-size:14.5px}
+.fb-body{color:#374151;font-size:14px;word-break:break-word}
+.fb-body b{color:var(--g800)}
+.hidden{display:none !important}
+#nextBtn{margin-top:14px}
+.result-head{text-align:center;padding:6px 0 16px}
+.score-big{font-size:clamp(38px,12vw,46px);font-weight:800;color:var(--g700);line-height:1.1}
+.score-sub{font-size:14px;color:var(--muted);margin-top:6px}
+.result-msg{margin-top:12px;font-size:15px;font-weight:600;color:var(--g800)}
+.wrong-list{margin-top:8px;max-height:42vh;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.wrong-list::-webkit-scrollbar{width:6px}
+.wrong-list::-webkit-scrollbar-thumb{background:#d1d5db;border-radius:4px}
+.wrong-item{background:#fafafa;border-left:3px solid var(--red);border-radius:0 10px 10px 0;padding:10px 14px;margin-bottom:8px;font-size:13.5px;line-height:1.65;word-break:break-word}
+.wrong-item b{color:var(--g800);font-size:14.5px}
+.wrong-item span{color:#4b5563}
+.wrong-cat{font-size:11px;color:#15803d;background:var(--g100);padding:1px 8px;border-radius:99px;font-weight:600}
+.search-box{width:100%;border:2px solid var(--line);border-radius:12px;padding:13px 16px;font-size:16px;font-family:inherit;outline:none;transition:.16s;margin-bottom:12px;background:#fff;color:var(--ink)}
+.search-box:focus{border-color:var(--g500);box-shadow:0 0 0 3px rgba(34,197,94,.13)}
+.browse-count{font-size:12.5px;color:var(--muted);margin-bottom:10px}
+.browse-list{max-height:60vh;overflow-y:auto;padding-right:4px;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.browse-list::-webkit-scrollbar{width:6px}
+.browse-list::-webkit-scrollbar-thumb{background:#d1d5db;border-radius:4px}
+.b-item{padding:11px 4px;border-bottom:1px dashed #eef0ee}
+.b-item:last-child{border-bottom:none}
+.b-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:3px}
+.b-word{font-weight:800;color:var(--g800);font-size:15.5px}
+.b-cat{font-size:11px;color:#15803d;background:var(--g100);padding:2px 8px;border-radius:99px;font-weight:600}
+.b-def{font-size:13.5px;color:#4b5563;line-height:1.65;word-break:break-word}
+.empty{text-align:center;color:var(--muted);padding:40px 0;font-size:14px}
+.wrong-detail-list{max-height:64vh;overflow-y:auto;padding-right:4px;margin-top:6px;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.wrong-detail-list::-webkit-scrollbar{width:6px}
+.wrong-detail-list::-webkit-scrollbar-thumb{background:#d1d5db;border-radius:4px}
+.wrong-detail-item{border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px;background:#fafafa}
+.wrong-detail-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.wrong-detail-index{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--red);color:#fff;font-size:12px;font-weight:800;flex:0 0 22px}
+.wrong-detail-word{font-weight:800;color:var(--g800);font-size:16px;word-break:break-word}
+.wrong-detail-cat{font-size:11px;color:#15803d;background:var(--g100);padding:2px 8px;border-radius:99px;font-weight:600}
+.wrong-detail-tag{font-size:11px;background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:99px;font-weight:600}
+.wrong-detail-question{font-size:13.5px;color:#1d4ed8;margin-bottom:10px;padding:10px 12px;background:#eff6ff;border-radius:10px;border-left:3px solid #3b82f6;line-height:1.7;word-break:break-word}
+.wrong-detail-question em{font-style:normal;font-weight:800;font-size:11px;margin-right:6px;letter-spacing:.5px}
+.wrong-detail-def{font-size:13.5px;color:#374151;line-height:1.7;margin-bottom:10px;padding:10px 12px;background:#fff;border-radius:10px;border:1px dashed #d1d5db;word-break:break-word}
+.wrong-detail-def em{font-style:normal;font-weight:800;font-size:11px;color:var(--g700);margin-right:6px;letter-spacing:.5px}
+.wrong-detail-row{font-size:13.5px;line-height:1.7;margin-top:6px;padding:9px 12px;border-radius:8px;word-break:break-word}
+.wrong-detail-row.user{background:#fef2f2;color:#991b1b;border-left:3px solid #dc2626}
+.wrong-detail-row.correct{background:#f0fdf4;color:#166534;border-left:3px solid #16a34a}
+.wrong-detail-row b{font-weight:800;margin-right:4px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:9999;display:none;align-items:center;justify-content:center;padding:16px}
+.modal.show{display:flex;animation:fade .22s ease}
+.modal-body{max-width:100%;max-height:100%;display:flex;flex-direction:column;gap:12px;align-items:center}
+.modal-img-wrap{max-width:100%;max-height:70vh;overflow:auto;border-radius:12px;background:#fff;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.modal-img-wrap img{display:block;max-width:100%;height:auto}
+.modal-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.modal-actions button{border:none;border-radius:12px;padding:12px 20px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;min-height:48px;min-width:110px}
+.modal-actions .primary-btn{width:auto;flex:0 0 auto;padding:12px 24px}
+.modal-hint{color:#d1d5db;font-size:12.5px;text-align:center;line-height:1.6;margin:0}
+.toast{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);background:rgba(17,24,39,.92);color:#fff;padding:14px 22px;border-radius:12px;font-size:14.5px;font-weight:600;z-index:10000;opacity:0;pointer-events:none;transition:opacity .25s ease;max-width:80vw;text-align:center}
+.toast.show{opacity:1}
 @media (max-width:520px){
-  .app{padding-top:calc(12px + var(--safe-t));padding-left:calc(12px + var(--safe-l));padding-right:calc(12px + var(--safe-r));}
-  .hero{padding:18px;border-radius:16px;margin-bottom:12px;}
-  .card{padding:16px;border-radius:16px;margin-bottom:12px;}
-  .mode-grid{grid-template-columns:1fr;}
-  .mode-btn{min-height:72px;padding:14px;}
-  .opt{padding:13px 14px;}
-  .chip{padding:8px 14px;}
-  .browse-list{max-height:56vh;}
-  .wrong-list{max-height:38vh;}
-  .wrong-detail-list{max-height:66vh;}
+  .app{padding-top:calc(12px + var(--safe-t));padding-left:calc(12px + var(--safe-l));padding-right:calc(12px + var(--safe-r))}
+  .hero{padding:18px;border-radius:16px;margin-bottom:12px}
+  .card{padding:16px;border-radius:16px;margin-bottom:12px}
+  .mode-grid{grid-template-columns:1fr}
+  .mode-btn{min-height:72px;padding:14px}
+  .opt{padding:13px 14px}
+  .chip{padding:8px 14px}
+  .browse-list{max-height:56vh}
+  .wrong-list{max-height:38vh}
+  .wrong-detail-list{max-height:58vh}
+  .modal-img-wrap{max-height:58vh}
 }
-
 @media (max-height:520px) and (orientation:landscape){
-  .app{padding-top:calc(10px + var(--safe-t));padding-bottom:calc(28px + var(--safe-b));}
-  .hero{padding:12px 18px;margin-bottom:10px;}
-  .hero h1{font-size:16px;}
-  .hero p{display:none;}
-  .hero::after{display:none;}
-  .card{padding:14px;margin-bottom:10px;}
-  .card-title{margin-bottom:10px;}
-  .chips{max-height:96px;}
-  .mode-grid{grid-template-columns:repeat(auto-fit,minmax(160px,1fr));}
-  .mode-btn{min-height:62px;padding:12px;}
-  .m-emoji{display:none;}
-  .q-text{font-size:16px;}
-  .q-text.meaning{font-size:14.5px;}
-  .opt{min-height:48px;padding:11px 13px;}
-  .browse-list{max-height:48vh;}
-  .wrong-list{max-height:34vh;}
-  .wrong-detail-list{max-height:52vh;}
+  .app{padding-top:calc(10px + var(--safe-t));padding-bottom:calc(28px + var(--safe-b))}
+  .hero{padding:12px 18px;margin-bottom:10px}
+  .hero h1{font-size:16px}
+  .hero p{display:none}
+  .hero::after{display:none}
+  .card{padding:14px;margin-bottom:10px}
+  .card-title{margin-bottom:10px}
+  .chips{max-height:96px}
+  .mode-grid{grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
+  .mode-btn{min-height:62px;padding:12px}
+  .m-emoji{display:none}
+  .q-text{font-size:16px}
+  .q-text.meaning{font-size:14.5px}
+  .opt{min-height:48px;padding:11px 13px}
+  .browse-list{max-height:48vh}
+  .wrong-list{max-height:34vh}
+  .wrong-detail-list{max-height:42vh}
+  .modal-img-wrap{max-height:52vh}
 }
 </style>
 </head>
@@ -261,29 +193,24 @@ body{
     <p>看意思选词语 · 看词语选意思 · 双模式交互记忆</p>
   </header>
 
-  <!-- ========== 首页 ========== -->
   <section id="screen-home" class="screen active">
     <div class="card">
       <h2 class="card-title">选择练习模式</h2>
       <div class="mode-grid" id="modeGrid">
         <button class="mode-btn active" data-mode="d2w" type="button">
-          <span class="m-emoji">🔤</span>
-          <span class="m-title">看意思选词语</span>
+          <span class="m-emoji">🔤</span><span class="m-title">看意思选词语</span>
           <span class="m-desc">给出释义，从四个成语中选出匹配的一个</span>
         </button>
         <button class="mode-btn" data-mode="w2d" type="button">
-          <span class="m-emoji">📜</span>
-          <span class="m-title">看词语选意思</span>
+          <span class="m-emoji">📜</span><span class="m-title">看词语选意思</span>
           <span class="m-desc">给出成语，从四个释义中选出正确的一项</span>
         </button>
         <button class="mode-btn" data-mode="mix" type="button">
-          <span class="m-emoji">🔀</span>
-          <span class="m-title">混合模式</span>
+          <span class="m-emoji">🔀</span><span class="m-title">混合模式</span>
           <span class="m-desc">两种题型随机穿插，全面检验掌握程度</span>
         </button>
       </div>
     </div>
-
     <div class="card">
       <h2 class="card-title">题目数量</h2>
       <div class="count-row" id="countRow">
@@ -294,20 +221,17 @@ body{
         <button class="count-chip" data-n="100" type="button">100 题</button>
       </div>
     </div>
-
     <div class="card">
       <h2 class="card-title">词条范围（可不选，默认全部）</h2>
       <div class="chips" id="catChips"></div>
       <div class="browse-count" id="poolInfo"></div>
     </div>
-
     <button class="primary-btn" id="startBtn" type="button">开始练习 →</button>
     <div class="row">
-      <button class="ghost-btn" id="browseBtn" style="flex:1;" type="button">📚 浏览全部词条</button>
+      <button class="ghost-btn" id="browseBtn" style="flex:1" type="button">📚 浏览全部词条</button>
     </div>
   </section>
 
-  <!-- ========== 答题 ========== -->
   <section id="screen-quiz" class="screen">
     <div class="quiz-bar">
       <span class="left" id="qIdx">1 / 20</span>
@@ -318,18 +242,15 @@ body{
       </span>
     </div>
     <div class="progress"><div class="progress-fill" id="progressFill"></div></div>
-
     <div class="card">
       <div class="q-tag" id="qTag">请选择与该意思相符的词语</div>
       <div class="q-text" id="qText">—</div>
     </div>
-
     <div class="options" id="options"></div>
     <div class="feedback" id="feedback"></div>
     <button class="primary-btn hidden" id="nextBtn" type="button">下一题 →</button>
   </section>
 
-  <!-- ========== 结果 ========== -->
   <section id="screen-result" class="screen">
     <div class="card">
       <div class="result-head">
@@ -339,1376 +260,580 @@ body{
       </div>
       <h2 class="card-title" id="wrongTitle">错题回顾</h2>
       <div class="wrong-list" id="wrongList"></div>
-      <div class="row" style="flex-wrap:wrap;">
-        <button class="primary-btn" id="againBtn" type="button" style="flex:1 1 130px;">再来一轮</button>
-        <button class="ghost-btn" id="viewWrongBtn" type="button" style="flex:1 1 130px;">📖 查看全部错题</button>
-        <button class="ghost-btn" id="homeBtn" type="button" style="flex:1 1 100px;">返回设置</button>
+      <div class="toolbar">
+        <button class="ghost-btn accent" id="viewWrongBtn" type="button">📖 查看全部错题</button>
+        <button class="ghost-btn" id="copyTextBtn" type="button">📋 复制错题文本</button>
+      </div>
+      <div class="row">
+        <button class="primary-btn" id="againBtn" type="button">再来一轮</button>
+        <button class="ghost-btn" id="homeBtn" type="button">返回设置</button>
       </div>
     </div>
   </section>
 
-  <!-- ========== 错题本 ========== -->
   <section id="screen-wrong" class="screen">
-    <div class="quiz-bar" style="margin-bottom:12px;">
+    <div class="quiz-bar" style="margin-bottom:12px">
       <span class="left">📖 错题本</span>
       <button class="ghost-btn" id="backFromWrongBtn" type="button">← 返回结果</button>
     </div>
     <div class="card">
       <h2 class="card-title">全部错题（<span id="wrongDetailCount">0</span>）</h2>
+      <div class="toolbar">
+        <button class="ghost-btn accent" id="saveImgBtn" type="button">📷 保存为图片</button>
+        <button class="ghost-btn" id="copyTextBtn2" type="button">📋 复制文本</button>
+      </div>
       <div class="wrong-detail-list" id="wrongDetailList"></div>
     </div>
   </section>
 
-  <!-- ========== 浏览 ========== -->
   <section id="screen-browse" class="screen">
     <div class="card">
       <input class="search-box" id="searchInput" type="search" placeholder="搜索成语或释义关键词…" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
       <div class="browse-count" id="browseCount"></div>
       <div class="browse-list" id="browseList"></div>
       <div class="row">
-        <button class="ghost-btn" id="backHomeBtn" style="flex:1;" type="button">← 返回设置</button>
+        <button class="ghost-btn" id="backHomeBtn" style="flex:1" type="button">← 返回设置</button>
       </div>
     </div>
   </section>
 </div>
 
+<div class="modal" id="imageModal">
+  <div class="modal-body">
+    <div class="modal-img-wrap"><img id="previewImg" alt="错题本图片"></div>
+    <div class="modal-actions">
+      <button class="primary-btn" id="downloadImgBtn" type="button">下载图片</button>
+      <button class="ghost-btn" id="closeModalBtn" type="button" style="background:#fff">关闭</button>
+    </div>
+    <p class="modal-hint">📱 手机：长按图片 → 保存到相册<br>💻 电脑：点"下载图片"</p>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
 <script>
-/* =========================================================
-   词库数据
-   ========================================================= */
+/* ========== 词库数据 ========== */
 const RAW = [
-["中华文明传统文化",[
-["源远流长","源头远，水流长。也比喻历史悠久。"],
-["连绵不绝","意思是连续而不断。"],
-["博大精深","形容学识、思想、理论广博丰富，精湛深刻。"],
-["历久弥新","指经历长久的时间而更加鲜活，更加有活力，更显价值。"]
-]],
-["文化传承",[
-["兼容并蓄","对不同的人或事物都能同时收容保留。"],
-["一脉相承","由一个血统或一个派别世代相传承袭下来。比喻人或事物间的传承关系。"],
-["血脉相通","原指有血缘亲属关系。也比喻极亲近的关系。"],
-["薪火相传","比喻学问和技艺代代相传。比喻师生授受不绝，绵延不尽。"],
-["不绝如缕","像一根细线那样，似断非断。比喻情势危急。"],
-["陈陈相因","粮仓里的米谷一年接一年地堆积起来。比喻沿袭老一套，没有改进。"],
-["口耳相传","口说耳听，递相传授。"],
-["后继无人","没有继承的人。形容事业缺少接班人。"],
-["难以为继","难以继续下去。"]
-]],
-["改革创新",[
-["继往开来","继承前人的事业，开辟未来的道路。"],
-["承上启下","接续上面的，引起下面的。也指诗文中连接沟通文字的字句。"],
-["推陈出新","推去旧的，产生新的。后多指在文化艺术方面去掉旧的糟粕，吸取其精华，创造出新的来。"],
-["吐故纳新","吐出浊气，吸进新鲜空气。后多比喻扬弃旧的，吸收新的。"],
-["革故鼎新","指革除旧的，建立新的。多指改朝换代或重大变革。"],
-["弃旧图新","抛弃旧的，谋求新的。多指由坏的转向好的，离开错误的道路走向正确的道路。"],
-["去芜存菁","意思是除去杂质、保留精华。"],
-["除旧布新","意思是清除旧的，建立新的；以新的代替旧的。"],
-["激浊扬清","强调通过主动干预消除负面因素并弘扬正面价值。"],
-["另辟蹊径","意思是另外开辟一条路。比喻另创一种风格或方法。"]
-]],
-["创新做法与构思",[
-["标新立异","原意为表明新颖的义理，提出与众不同的见解。后指故意提出新奇的见解，表示自己与众不同。"],
-["与时俱进","与时间一起前进。指不断进取，永不停滞。"],
-["剑走偏锋","指不走常规，找一些新的、不同以往的办法来解决问题，以求出奇制胜。"],
-["不拘一格","指不拘泥于一种规格、方式，比喻打破常规。"],
-["匠心独运","具有独到的创造性。多指文学艺术的创作构思。"],
-["别出心裁","另外想出与众不同的办法、主意。"],
-["独树一帜","单独树起一面旗帜。比喻创造独特风格，自成一家。"],
-["自成一家","指在某一方面的学问或技术有独到的见解或独特的做法，能自成体系。"],
-["别开生面","比喻另外开创新的局面或新的形式。"],
-["不落窠臼","意为不落俗套，有独创风格（多用于形容文章或艺术作品）。"]
-]],
-["守旧不创新",[
-["墨守成规","形容因循守旧，不肯改变。"],
-["抱残守缺","固守陈旧残缺的东西不放，形容保守，不知改进。"],
-["因循守旧","指一直沿用旧办法而不加改变。"],
-["固步自封","比喻因循守旧，安于现状，不求创新进取。"],
-["食古不化","指对所学的古代知识理解得不透，不善于按现在的情况来运用。"]
-]],
-["按规矩办事",[
-["按图索骥","照着图像去寻找良马。比喻做事死守教条，而不懂得变通。也比喻依据一定的线索去寻找事物。"],
-["按部就班","原指写文章按类别安排文义，按顺序组织文辞。后指按照一定的次序或部署进行。"],
-["循规蹈矩","原指遵守规矩，不敢违反。后指拘守旧准则，不敢稍作变动。"],
-["循规拘礼","遵循规则，拘泥礼节。"],
-["照本宣科","原指照着书本或讲稿逐字宣读。引申为机械执行既定规则或文本内容，缺乏创造性。"],
-["循序渐进","指事物的发展或学习工作等按照一定的步骤逐渐深入或提高。"],
-["有条不紊","条：条理。紊：乱。形容办事很有条理。"]
-]],
-["处境困难",[
-["望而生畏","指看见了就害怕。"],
-["望而却步","形容遇到危险、困难或力所不及的事就往后退缩。"],
-["畏葸不前","畏惧退缩，不敢前进。"],
-["进退两难","前进和后退都难。比喻事情无法决定，因而难以行动。"],
-["骑虎难下","比喻事情遇到困难，迫于形势不能中止，陷入进退两难的境地。"],
-["进退维谷","指前进或后退都处于困难境地。形容进退两难。"],
-["瞻前顾后","多用于形容顾虑太多，犹豫不决。"],
-["踌躇不前","意思为迟疑不决，不敢前进。"],
-["裹足不前","比喻因心存顾虑而停止行动或不敢向前。"],
-["举步维艰","指脚行走十分困难。形容已陷入十分艰难的处境。"],
-["寸步难行","一步也难以行走。形容陷入困难境地，无法进行活动。"]
-]],
-["形势危险",[
-["岌岌可危","形容非常危险，快要倾覆或灭亡。"],
-["危如累卵","比喻形势非常危险，如同堆起来的蛋，随时都有塌下打碎的可能。"],
-["命悬一线","处境危险，随时可能丧失生命。"],
-["风雨飘摇","在风雨中飘荡不定。比喻局势动荡不安，很不稳定。"],
-["危在旦夕","旦夕：早晨和晚上，形容时间短。形容危险就在眼前。"],
-["危若朝露","危险得像清早的露水一样，太阳一出就要消失，形容面临灭亡，情况危急。"],
-["风起云涌","形容雄浑磅礴之势；也比喻事物迅速发展，声势浩大。"],
-["方兴未艾","意思是事物正在发展，尚未达到止境。"]
-]],
-["事物出现发展衰落",[
-["雨后春笋","春天下雨后竹笋长得又多又快，比喻新生事物大量涌现和蓬勃发展。"],
-["横空出世","形容人或物高大，横在空中，浮出人世，或比喻卓尔不群。"],
-["异军突起","比喻一支新生力量突然崛起。"],
-["应运而生","指顺应时机而产生。"],
-["高歌猛进","意思是高声歌唱，勇猛前进；形容在前进的道路上，充满乐观精神。"],
-["如火如荼","原比喻军容之盛，现在形容旺盛、热烈或激烈。"],
-["蒸蒸日上","形容事业一天天地向上发展。"],
-["如日中天","像太阳正运行到正午。比喻正发展到最兴盛的阶段。"],
-["势如破竹","形容节节胜利，毫无阻碍。"],
-["突飞猛进","形容发展十分迅速。"],
-["一日千里","一天跑一千里。也比喻进步、发展很快。"],
-["日新月异","形容发展变化很快，新事物、新气象不断出现。"],
-["阪上走丸","指在斜坡上滚弹丸，比喻形势发展迅速或工作进行顺利。"],
-["层出不穷","接连出现，没有穷尽。"],
-["日渐式微","事物逐渐地由兴盛而衰落。"],
-["每况愈下","指情况越来越坏，越来越糟糕。"],
-["江河日下","比喻事物日趋衰落，情况一天不如一天。"],
-["水涨船高","水位上涨，船体也随着上升。比喻事物随着它所凭借的基础而增长。"],
-["此消彼长","指这个下降，那个上升。"],
-["波澜壮阔","原形容水面辽阔，现比喻声势雄壮或规模宏大。"],
-["柳暗花明","也比喻在困难中遇到转机。"]
-]],
-["竞争比较",[
-["拨云见日","比喻冲破黑暗见到光明。也比喻疑团消除，心里顿时明白。"],
-["相形见绌","跟同类的人或同类事物相比较，显出很不足。"],
-["出类拔萃","指人的品德才能出众，高出同类之上。"],
-["无与伦比","指事物非常完美，没有能够与它相比的同类的东西。"],
-["脱颖而出","比喻才能完全显露出来。"],
-["崭露头角","比喻突出地显露出才能。"],
-["大显身手","充分显示出本领和才能。"],
-["望其项背","能够看到别人的颈项和脊背。比喻有能力赶得上。（常用于否定句）"],
-["望尘莫及","指望见前面人马扬起的尘土而追赶不上。比喻远远落在后面，相差甚远。"],
-["相提并论","把不同的人或不同的事情放在一起谈论或看待。（多用于否定句中）"],
-["同日而语","指相提并论。（侧重强调时间上的对比，多用于否定句中）"],
-["等量齐观","等：同等。齐：一样。把不同的事物一律同等看待。"],
-["一概而论","用同一标准来对待或处理（多用于否定）。"],
-["力有未逮","指有意愿却做不到。"],
-["爱莫能助","虽然心中关切同情，却没有力量帮助。"],
-["鞭长莫及","比喻相隔太远，力量达不到。"],
-["望洋兴叹","现多比喻做事时因为不胜任或没有条件而感到无可奈何。"]
-]],
-["能力不足",[
-["力不从心","心里想做，可是力量够不上。"],
-["回天乏术","比喻局势或病情严重，已无法挽救。"],
-["捉襟见肘","形容衣裳破旧。也比喻困难很多，应付不过来。"],
-["顾此失彼","顾了这个，丢了那个。形容忙乱或慌张的情景。"],
-["左支右绌","指力量不足，应付了这方面，那方面又出了问题。"],
-["独木难支","一根木头支不住高大的房子。比喻一个人的力量单薄，维持不住全局。"],
-["应接不暇","原指景物很多，顾不上观赏。后形容太繁忙，应付不过来。"]
-]],
-["学习粗浅与领悟",[
-["浮光掠影","比喻因事物很快消逝而使人对它的印象不深。"],
-["走马观花","比喻观察事物或者了解情况不深入细致。"],
-["蜻蜓点水","比喻进行某些动作时只轻轻接触表面。也比喻肤浅不深入。"],
-["浅尝辄止","只略微尝试一下就停止。比喻做事不求深入。"],
-["囫囵吞枣","把枣子整个吞下。比喻笼统地接受，不加分析、甄别，不求甚解。"],
-["不求甚解","后指只求懂个大概，不去深入理会。"],
-["举一反三","指举出一件事，就可以触类旁通，类推出许多同类事物来。"],
-["融会贯通","指把各方面的知识、道理融会贯穿，从而获得对事物全面、透彻地理解和领悟。"],
-["触类旁通","指掌握了某一事物的规律或知识，就能够以此类推，了解同类的其他事物。"]
-]],
-["搭档配合",[
-["相辅相成","指两种事物互相辅助，互相促成，缺一不可。"],
-["相得益彰","两个人或两件事相互配合，双方的能力和作用更能显示出来。"],
-["锦上添花","指在有彩色花纹的丝织品上再绣上花朵。比喻美上加美，喜上加喜。"],
-["珠联璧合","后多比喻美好的人及事物凑在一起。"],
-["互为表里","甲为乙的外表，乙为甲的内里；比喻互相依存，互相接受。"],
-["交相辉映","各种光亮、色彩相互照耀、映射。"],
-["相映成趣","相互衬托着，显得很有情趣，很有意思。"],
-["双峰并峙","比喻在某一领域或文化上同时达到极高成就的两个人物或事物。"],
-["并行不悖","悖：违反，违背。指同时进行而互相不违背。"],
-["齐头并进","指几方面同时前进。"],
-["双管齐下","比喻一件事同时采用两种办法或两件事同时进行。"],
-["并驾齐驱","比喻相互之间不相上下。"],
-["一马当先","策马走在最前面。形容率先、领先。"]
-]],
-["错误抉择与方向",[
-["本末倒置","比喻把事情的轻重主次颠倒了过来。"],
-["舍本逐末","比喻放弃根本，追求末节，轻重主次倒置。"],
-["喧宾夺主","比喻外来的或次要的事物占据了原有的或主要的事物的位置。"],
-["得不偿失","所得到的抵不上所失去的。"],
-["因小失大","因：为了。指为了小的利益造成大的损失。"],
-["因噎废食","比喻因为碰到挫折，连该做的事情也不做了。"],
-["背道而驰","比喻彼此方向目标完全相反。也比喻背离正确的目标，朝相反的方向走。"],
-["南辕北辙","比喻行动和目的截然相反。（多形容同一个主语、侧重目标与做法相反）"],
-["分道扬镳","指分道而行。也比喻思想、志趣不同而各人干各人的事。"]
-]],
-["错误做法（寓言故事）",[
-["缘木求鱼","缘木：爬树。比喻方向、方法不对，就不可能达到目的。"],
-["拔苗助长","比喻违反事物的发展规律，急于求成，反而坏事。"],
-["越俎代庖","比喻处理超过自己职权范围的事情。"],
-["削足适履","鞋小脚大，把脚削去一块来凑合鞋的大小。比喻不合理地迁就凑合或不顾具体条件，生搬硬套。"],
-["闭门造车","关起门来造车子。比喻不管客观情况如何，只凭主观愿望办事。"],
-["刻舟求剑","比喻拘泥、不变通，不懂得根据实际情况处理问题。"],
-["守株待兔","比喻心存侥幸，不劳而获。也比喻死守狭隘经验，不知变通。"],
-["掩耳盗铃","比喻自欺欺人。"],
-["邯郸学步","比喻一味地模仿别人，不仅没学到本事，反而把原来的本事也丢了。"],
-["盲人摸象","比喻看问题不全面，以偏概全。"],
-["与虎谋皮","跟老虎商量取下它的皮来，比喻跟坏人商量要其牺牲自己的利益，是绝对办不到的。"]
-]],
-["教育影响批评",[
-["潜移默化","指受到外来影响而在不知不觉中发生变化。"],
-["耳濡目染","因经常听到看到而不知不觉受到影响。"],
-["如沐春风","像沐浴在春风里一样，感受到舒适的感觉。"],
-["润物无声","指有大胸怀者，做了贡献而不张扬，默默奉献。"],
-["成风化人","通过倡导树立一种社会风气来影响、教育感化社会大众。"],
-["耳提面命","提着耳朵叮嘱、当面指教，形容教诲殷切。多指恳切地教导。"],
-["苦口婆心","用来形容一个人善意且耐心地反复劝导他人。"],
-["循循善诱","指善于有步骤地引导别人。多形容教育得法。"],
-["诲人不倦","教导人时很有耐心而不知疲倦。"],
-["春风化雨","比喻良好的教育。多用来称颂师长对学生及晚辈潜移默化的教诲。"],
-["和风细雨","意思是比喻耐心地和颜悦色地批评或劝说。"],
-["醍醐灌顶","比喻给人灌输智慧，使人从迷惑中醒悟或彻底觉悟。"],
-["振聋发聩","比喻唤醒糊涂麻木之人。"],
-["如履薄冰","形容战战兢兢、小心谨慎的样子。"],
-["兢兢业业","后多用来形容小心谨慎、不敢懈怠的样子。"],
-["专心致志","把心思全部放在上面。形容一心一意，精神集中。"]
-]],
-["工作学习状态",[
-["殚精竭虑","殚：竭尽。用尽精力和心思。"],
-["呕心沥血","呕：吐。沥：滴。形容费尽心思。"],
-["苦心孤诣","指尽心竭力钻研，达到了别人所达不到的地步。"],
-["废寝忘食","顾不上睡觉，忘记了吃饭。形容对某事专心致志。"],
-["皓首穷经","钻研经籍直到人老头白。"],
-["心无旁骛","心思没有另外的追求，形容心思集中，专心致志。"],
-["乐此不疲","因酷爱干某事而不感觉厌烦。形容对某事特别爱好而沉浸其中。"],
-["挖空心思","想方设法，费尽心机（多含贬义）。"],
-["夜以继日","日夜不停地做某事。多形容十分勤奋、勤恳、忙碌。"],
-["焚膏继晷","点燃灯烛来接替日光照明，形容夜以继日地用功读书或努力工作。"],
-["夙兴夜寐","早起晚睡，形容勤奋辛劳。"],
-["目不窥园","形容学习专心致志，十分刻苦。"],
-["风餐露宿","在风中吃饭，在露天住宿。形容旅途中的辛苦劳累。"],
-["筚路蓝缕","驾着柴车穿着破旧衣服去开辟山林。现用来形容创业的艰难与辛苦。"],
-["披星戴月","身披星光，头顶月色。形容早出晚归或连夜赶路。"],
-["栉风沐雨","形容人辛苦地四处奔波。"],
-["摩顶放踵","意思是从头顶到脚跟都擦伤了；形容不辞劳苦，不顾身体。"],
-["胼手胝足","意思是手脚生茧。形容劳动十分辛勤。"],
-["孜孜不倦","形容勤奋、不知疲倦。"],
-["孜孜以求","意思是不知疲倦地探求。"]
-]],
-["正确做法",[
-["条分缕析","一条条分析。形容分析得有条理，很细致。"],
-["抽丝剥茧","形容分析事物极为细致，而且一步一步很有层次。"],
-["深入浅出","指讲话或文章的内容深刻，语言文字却浅显易懂。"],
-["纲举目张","比喻抓住事物的主要环节，就可带动一切。"],
-["提纲挈领","意思是抓住事物的关键部分或者核心要点，用简洁明了的方式进行概述。"],
-["以一持万","形容抓住了关键的环节或因素，从而能够控制和影响整个局面。"],
-["博采众长","从多方面吸取各家的长处。"],
-["见贤思齐","指见到有才德的人就想着与他齐平。"],
-["量力而行","指根据自身的实际能力和条件来决定行动的范围，做事不要超过自己的能力范围。"],
-["厚积薄发","形容积累丰富的学问而不轻易表现出来。"],
-["脚踏实地","比喻做事踏实，认真。"],
-["义不容辞","道义上不容许推辞。指理应接受。"],
-["责无旁贷","指自己应尽的责任，不能推给别人。"]
-]],
-["错误做法",[
-["过犹不及","事情做得过了头，就跟做得不够一样，都不合适。"],
-["矫枉过正","指纠正偏失错误，超过了应有的限度。"],
-["于事无补","指某种言行对于解决问题没有帮助。"],
-["欲速不达","指违背规律、一味求快，反而达不到目的。"],
-["作茧自缚","蚕吐丝作茧，把自己包在里面。比喻自己束缚了自己或使自己陷入困境。"],
-["扬汤止沸","比喻不能解决根本问题的做法。"],
-["隔靴搔痒","比喻说话、做事、写文章不中肯，没有抓住关键。"],
-["临渊羡鱼","比喻有欲望想得到某种东西，但却没有实际行动。"],
-["有恃无恐","因有所依仗而毫不害怕。"],
-["堂而皇之","形容公然而毫不掩饰（多含贬义）。"],
-["明目张胆","强调公开、毫无顾忌地做坏事，带有明显的贬义。"],
-["画地为牢","在地上画个圈儿，作为牢狱。比喻局限在小圈子里活动。"],
-["以邻为壑","比喻把困难、灾祸推给别人。"],
-["穿凿附会","意思是把讲不通的或不相干的道理、事情硬扯在一起进行解释。"],
-["亦步亦趋","比喻因缺乏主见，任何事都模仿、追随他人。"],
-["唯利是图","只要有利可图，什么事都干。"],
-["隔岸观火","指站在对岸观望火灾；用来比喻对别人的急难不加救助，而采取看热闹的态度。"],
-["置身事外","把自己放在事情之外。形容毫不关心。"],
-["袖手旁观","比喻置身事外，既不过问，也不协助别人。"],
-["作壁上观","比喻站在一旁看着，不动手帮助。"],
-["坐收渔利","比喻利用别人的矛盾而从中获利。"],
-["坐享其成","意思为自己不出力而享受别人取得的成果。"],
-["竭泽而渔","排尽湖中或池中的水捕鱼。比喻取利只顾眼前，不作长远打算。"],
-["杀鸡取卵","比喻贪图眼前微小的好处而损害长远的利益。"],
-["寅吃卯粮","比喻经济困难，入不敷出。"],
-["饮鸩止渴","比喻用有害的方法解决面临的困难，而不顾后果。"],
-["急功近利","急于求成，贪图眼前的成效和利益。"]
-]],
-["国家安定与动荡",[
-["颠沛流离","形容生活困苦，流落异乡，无安身之所。"],
-["流离失所","形容到处流浪，没有安身的地方。"],
-["背井离乡","指被迫离开家乡，到外地求生。"],
-["民不聊生","百姓没有办法生活下去。形容生活极端困苦。"],
-["安居乐业","指安定愉快地生活和劳动。"],
-["海晏河清","黄河水清了，大海没有浪了。比喻天下太平。"],
-["安土重迁","安于本乡本土，不愿轻易迁移。"],
-["国泰民安","国家太平，人民生活安定。形容社会安定，人民生活幸福。"]
-]],
-["国际国内关系",[
-["休戚与共","欢乐，忧愁彼此相关联。形容关系密切同甘共苦。"],
-["休戚相关","欢乐，忧愁彼此相关联。形容关系密切，利害相关。"],
-["息息相关","呼吸时进出的气息相互关连。形容关系或联系非常密切。"],
-["同舟共济","同乘一条船过河。比喻齐心协力渡过困难。"],
-["同心同德","思想统一，信念一致。形容大家团结一条心。"],
-["和衷共济","大家同心渡过江河。比喻同心协力，渡过难关。"],
-["水乳交融","水和乳汁融合在一起。比喻意气相投、感情融洽。"],
-["相濡以沫","比喻在困境中用微薄的力量相互帮助。"],
-["守望相助","指彼此关照，互相帮助。"],
-["一衣带水","现比喻仅隔一水，极其邻近。"],
-["唇齿相依","嘴唇与牙齿互相依存。比喻关系极为密切。"],
-["波诡云谲","好像云彩和水波那样，形态不可捉摸。"],
-["风云变幻","像风和云那样变化莫测。比喻局势多变或情况复杂。"],
-["纵横捭阖","指在政治、外交上运用手段进行联合或分化。"],
-["沆瀣一气","泛指臭味相投的人结合在一起。"],
-["同流合污","后指跟坏人一起干坏事。"]
-]],
-["政府优秀做法",[
-["因地制宜","根据不同地方的基本情况，制定相应的办法。"],
-["量体裁衣","按身材裁剪衣服。也比喻按实际情况办事。"],
-["对症下药","医生针对病症开方用药。比喻针对问题所在确定解决方法。"],
-["有的放矢","对着靶子射箭。比喻目的性强，有针对性。"],
-["因势利导","指顺着事物的发展趋势而加以引导。"],
-["保驾护航","保护某事物能让其能正常发展。"],
-["穿针引线","使线的一头通过针眼。比喻从中联系、拉拢。"],
-["广开言路","指尽量给下面创造发表意见的条件。"],
-["集思广益","指集中众人的智慧，可以收到更好的效果。"],
-["正本清源","从根本上整顿，从源头上清理。比喻从根本上加以整顿清理。"]
-]],
-["合理规划",[
-["开源节流","开发财源，节省支出，以储蓄财力。"],
-["降本增效","在企业管理中通过一系列措施来实现成本的降低和效益的增加。"],
-["精打细算","意思是精密地计划，详细地计算。指在使用人力、物力时计算得很精细。"],
-["细水长流","比喻节约使用财物，使经常不缺用。也比喻一点一滴不间断地做某件事。"],
-["量入为出","根据收入的情况来安排支出。"]
-]],
-["政策措施的成效",[
-["立竿见影","在阳光下竖起竹竿，立刻就能看到它的影子。比喻效果显著迅速。"],
-["一劳永逸","指辛苦一次把事情办好，以后就不用费力了。"],
-["行之有效","实行起来有成效。指某种方法或措施已经实行过，证明很有效用。"],
-["一蹴而就","踏一步就可以获得成功，比喻事情很容易做。（多用于否定句中）"],
-["一步登天","比喻一下达到很高的境界、程度。也比喻人一下子爬上高位。"],
-["迎刃而解","比喻主要问题解决了，其他的问题就很容易解决。"],
-["事半功倍","形容费力小，收效大。"],
-["釜底抽薪","从锅底下抽出柴火。比喻从根本上解决问题。"],
-["标本兼治","从枝节和根本方面都得到治理。"],
-["触手可及","伸手便可接触到。形容距离很近。"],
-["唾手可得","往手上吐唾沫。比喻极容易得到。"],
-["手到擒来","一出手就把人捉住。形容做事毫不费力或很有把握。"],
-["信手拈来","随手拿来，多指写文章时能自由纯熟地选用词语或应用典故、素材。"],
-["游刃有余","比喻工作熟练，实际经验很丰富，解决困难问题毫不费事。"],
-["束手无策","手被捆住，无法应对。形容遇到问题没有解决的办法。"],
-["一筹莫展","一点计算也施展不出。形容没有一点办法。"]
-]],
-["领导力",[
-["功亏一篑","比喻做事情只差最后一点而前功尽弃。"],
-["事与愿违","事实与主观愿望相反。"],
-["适得其反","结果与愿望恰好相反。"],
-["功败垂成","事情在将要成功的时候失败了。含惋惜意。"],
-["失之交臂","形容当面错过。"],
-["高屋建瓴","形容居高临下，不可阻挡的形势。"],
-["高瞻远瞩","登高望远。形容目光远大。"],
-["深谋远虑","计谋深远，考虑周密。"],
-["审时度势","观察时机，估计发展趋势。用来指对形势有洞察力。"],
-["运筹帷幄","指在后方指挥、筹划。"],
-["统筹兼顾","意思是统筹一切，全面照顾。"],
-["身体力行","指亲身体验，努力实践。"],
-["亲历亲为","亲自参与，不由别人来代替。"],
-["克己奉公","克制自己的私心，一心为公。"],
-["以身作则","自己以行动给大家做出榜样。"],
-["上行下效","指上面的人怎么做，下面的人就跟着怎么干。"],
-["事必躬亲","凡事都一定要自己亲自去做。"],
-["一以贯之","指做人做事，按照一个道理，从始至终都不会改变。"],
-["矢志不渝","指立下志愿，绝不改变。"],
-["坚定不移","意思是稳定坚强，毫不动摇；不放弃，不改变自己的想法。"],
-["前仆后继","前面的人倒下了，后面的人继续跟上去。英勇斗争，不怕牺牲。"],
-["视死如归","把死看得像回家一样平常。形容不怕牺牲生命。"],
-["大义凛然","形容为了坚持真理而表现出的严峻不可侵犯的样子。"],
-["勇往直前","勇敢地一直前进。"],
-["挺身而出","形容面对着艰难或危险的事情，勇敢地站出来。"],
-["踔厉奋发","形容精神振奋，斗志昂扬。"],
-["笃行不怠","意思是切实履行自己所学的内容，不感到倦怠。"],
-["赓续前行","意思是指不断地延续和发展，保持进步的态度和生活方式。"],
-["奋楫争先","意思是奋力划动船桨的人争先恐后走在前头。"],
-["砥砺前行","经历磨炼，克服困难，往前进步的意思。"],
-["勇毅前行","意思是勇敢并且坚毅地向前进步或发展。"],
-["一鼓作气","比喻趁劲头大的时候鼓起干劲，一口气把工作做完。"]
-]],
-["干部易犯错误",[
-["好高骛远","指不切实际地追求过高、过远的目标。"],
-["好大喜功","喜欢做大事、立大功。多形容浮夸、不切实际的行为。"],
-["沽名钓誉","比喻故意矫情做作，用手段猎取名声或赞誉。"],
-["附庸风雅","指缺乏文化修养的人为了装点门面而结交文人，参加有关文化活动。"],
-["独善其身","指只顾保持自身修养而不顾他人或全局。"],
-["明哲保身","指聪明有智慧之人，善于趋安避危，保全自身。也指为保全个人利益而回避原则问题。"],
-["虚与委蛇","指对人虚情假意，敷衍应酬。"],
-["委曲求全","曲意迁就，以求事成，或保全大局。"],
-["敷衍塞责","做事马虎，应付一下以搪塞责任。"],
-["曲意逢迎","违背自己的本心，千方百计迎合或讨好别人。"],
-["投其所好","意思是迎合别人的喜好。"],
-["阿谀奉承","为讨好而说好听的话恭维别人。"],
-["趋炎附势","奉承和依附有权有势的人。"],
-["如蚁附膻","比喻许多臭味相投的人追求不好的事物。也比喻许多人依附有钱有势的人。"],
-["兴师动众","现多指动用很多人力做某件事。"],
-["劳民伤财","意思是既使人民劳苦，又耗费钱财。"],
-["朝令夕改","形容政令无常。也形容主张、办法等经常改变。"],
-["粗枝大叶","意思是比喻工作粗糙，不认真细致，马虎大意。"],
-["大而化之","形容做事情不够谨慎，疏忽大意。"],
-["哗众取宠","用浮夸的言词或做作的行动去迎合群众，以博取好感和支持。"],
-["重蹈覆辙","比喻不吸取失败的教训，重犯以前的错误。"]
-]],
-["对待错误的态度",[
-["从谏如流","听从规劝像流水一样自然。形容乐于接受别人的批评意见。"],
-["从善如流","形容能迅速地接受别人的好意见。"],
-["闻过则喜","听到别人批评自己的缺点或错误，表示欢迎和高兴。指虚心接受意见。"],
-["虚怀若谷","胸怀像山谷一样深广。形容十分谦虚，能容纳别人的意见。"],
-["文过饰非","用漂亮的言词掩饰自己的过失和错误。"],
-["怙恶不悛","坚持作恶，不肯悔改。"],
-["欲盖弥彰","想掩盖坏事的真相，结果反而更明显地暴露出来。"],
-["刚愎自用","十分固执自信，不考虑别人的意见。"],
-["固执己见","顽固地坚持自己的意见，不肯改变。"],
-["洗心革面","比喻彻底悔改。"],
-["脱胎换骨","现比喻通过教育，思想得到彻底改造。"],
-["改头换面","比喻只改变形式，而内容、实质不变。"]
-]],
-["改变与不变",[
-["一成不变","指事物一形成就不再改变。（多用于否定句中）"],
-["亘古不变","从古至今永远也不会改变。"],
-["改弦更张","比喻改革制度或变更计划、方法。"],
-["改弦易辙","比喻改变方向或做法。"],
-["变幻莫测","变化奇特，不可预测。"],
-["瞬息万变","形容变化很多很快。"],
-["经久不衰","形容某事或某人经历很长时间仍旧保持较高的旺盛状态。"],
-["长盛不衰","长久兴盛而不衰败，比喻长时间保持旺盛的势头。"],
-["今非昔比","现在不能和过去相比。形容变化大。（多形容现在比过去好）"],
-["天翻地覆","形容变化巨大。也形容闹得很凶。"],
-["时过境迁","时间过去了，环境或情况也随之改变了。"],
-["沧海桑田","大海变为桑田，桑田变为大海。比喻世事变化非常大。"],
-["斗转星移","指岁月流逝。"],
-["白云苍狗","比喻世事变化无常。"],
-["恍如隔世","指一种因人事或景物变化很大而引起的感触。"],
-["根深蒂固","比喻基础稳固。（中性）"],
-["积习难改","长期形成的某种习惯，很难改变。"],
-["积重难返","积习深重，难以改变。多指长期存在的恶习、弊端已经发展到了难以革除的地步。"],
-["顺势而为","顺应形势做事情。"],
-["大势所趋","整个局势发展的方向。"],
-["势在必行","客观形势决定必须这样做。"],
-["随波逐流","随着波浪起伏，跟着流水漂荡。比喻自己没有主见，只是随着别人走。"],
-["因陋就简","指在条件有限的情况下，利用现有简陋条件将就办事。"],
-["推波助澜","比喻推动、助长事物的声势及发展。（中性词）"],
-["顺水推舟","顺着水流的方向推船。比喻顺应某个趋势说话办事。"]
-]],
-["自然会发生",[
-["理所当然","指从道理上讲，应该如此。"],
-["顺理成章","比喻随着某种情况的发展而自然产生的结果。"],
-["天经地义","指天地间理所当然而不能改变的道理。"],
-["水到渠成","比喻当条件成熟时，事情会自然成功，并不需要强求。"],
-["顺其自然","意思是顺着事物本来的性质自然发展。"]
-]],
-["提早准备和补救",[
-["未雨绸缪","绸缪：缠绕，引申指修缮。比喻事先做好防备工作。"],
-["常备不懈","意思是时刻准备着，毫不松懈。"],
-["防患未然","在祸患还没有发生之前就进行防备。"],
-["防微杜渐","指在不良的事物刚刚露出苗头时，就加以制止和杜绝，不让它发展下去。"],
-["居安思危","处在安定的环境时而能想到可能会出现的危难。"],
-["有备无患","指事先有准备，才可以避免祸患。"],
-["曲突徙薪","比喻事先采取措施，才能防止灾祸。"],
-["高枕无忧","垫高枕头睡觉，无所忧虑。"],
-["临渴掘井","感到口渴才挖井。比喻平时没有准备，事到临头才想办法。"],
-["江心补漏","指船到江心才补漏洞。比喻临到紧急关头才设法补救，为时已晚。"],
-["亡羊补牢","比喻出了问题以后及时想办法补救，以免继续受损失。"]
-]],
-["办公与管理",[
-["尾大不掉","比喻属下势力强大，不服从指挥调度。也比喻事情前轻后重，难以驾驭的现象。"],
-["各行其是","指各人按照自己认为正确的去做。"],
-["各自为政","各人按自己的主张办事。"],
-["人浮于事","指人员的数目超过工作的需要。"],
-["如鱼得水","比喻得到跟自己非常投合的人或对自己很适合的环境。"],
-["面面俱到","各方面都照顾得很周到。"],
-["独当一面","意思是单独负责一个方面的工作或任务。"]
-]],
-["空谈与虚幻",[
-["纸上谈兵","比喻空谈理论，不能解决实际问题。"],
-["无根之木","意思是比喻没有根据或基础的事物。"],
-["坐而论道","意思是坐着空谈大道理。指口头说说，不见行动。"],
-["水中捞月","指在水中捞月亮；比喻去做根本做不到的事情，只能徒劳无功。"],
-["画饼充饥","后多用来比喻以空想来安慰自己。"],
-["空中楼阁","后多用来比喻虚构的事物或脱离实际的空想。"],
-["镜花水月","镜子里的花，水里的月亮。比喻虚幻的东西。"],
-["海市蜃楼","比喻虚无缥缈而不实际存在的事物。"]
-]],
-["来者众多与冷清",[
-["接踵而至","形容人接连而来或事情持续发生。"],
-["络绎不绝","形容车船人马等前后相接，往来不断。"],
-["纷至沓来","形容连续不断地纷纷到来。"],
-["蜂拥而至","像一窝蜂似地一拥而来。形容很多人乱哄哄地朝一个地方聚拢。"],
-["门庭若市","门口和庭院就像集市一样，热闹非凡。形容往来的人很多。"],
-["无人问津","没有人来询问渡口。比喻没人过问、受到冷落。"],
-["门庭冷落","形容十分冷落，宾客稀少。"],
-["门可罗雀","大门之前可以张起网来捕麻雀。形容十分冷落，宾客稀少。"]
-]],
-["人多热闹与孤独",[
-["不期而遇","没约定而意外相遇。"],
-["萍水相逢","比喻从不认识的人偶然相遇。"],
-["不期而至","指事先没有约定而意外到来，没有预料地到来。"],
-["如影随形","好像影子总是跟着身体一样。比喻两个人关系亲密，常在一起。"],
-["熙熙攘攘","形容人来人往，纷杂拥挤。"],
-["人头攒动","一般用于形容某些地方人口密度较大，但程度不如人山人海高。"],
-["人山人海","形容聚集的人非常多。"],
-["车水马龙","车像流水，马如游龙。形容车马来来往往的热闹景象。"],
-["川流不息","形容行人、车马很多，像水流一样连续不断。"],
-["万人空巷","指家家户户的人都从巷里出来了。多形容庆祝、欢迎等盛况。"],
-["孑然一身","指孤身一人。（常用褒义，形容追寻事业或理想）"],
-["形影相吊","只有自己的身体和影子相互慰问。形容无依无靠，非常孤单。"],
-["形单影只","形容孤独，没有伴侣。"],
-["人迹罕至","指偏僻荒凉、少有人到的地方。"]
-]],
-["好坏掺杂",[
-["参差不齐","形容不一致、有差别。"],
-["泥沙俱下","泥土和沙子一同随水冲了下来。比喻人或事物好坏混杂在一起。"],
-["良莠不齐","指好人、坏人混在一起。"],
-["鱼龙混杂","比喻坏人和好人混在一起。"],
-["鱼目混珠","用鱼眼睛假冒珍珠。比喻以假乱真。"],
-["滥竽充数","比喻没有真实本领的人，混在行家队伍里充数。"],
-["买椟还珠","比喻没有眼光，不识货，取舍失当。"]
-]],
-["流行与名声",[
-["蔚然成风","形容一种事物逐渐发展流行，形成风气。（多含褒义）"],
-["风靡一时","形容某一种事物在一个时期内非常流行。（中性）"],
-["如雷贯耳","形容人的名声很大。"],
-["炙手可热","手一靠近就感觉很烫，比喻气焰盛，权势大。"],
-["名噪一时","一时名声很大。指名声传扬于一个时期。"],
-["闻名遐迩","形容名声很大，主要指远近闻名。"],
-["靡然成风","指相互跟风，群起效尤而成风气，贬义词，多指不好的风气。"],
-["大行其道","新潮事物流行成为一种风尚。"],
-["甚嚣尘上","形容对某事议论纷纷。（中性词，多贬义）"],
-["煊赫一时","意思是在一段时间内名声威势很盛，含贬义。"],
-["趋之若鹜","像鸭子一样成群地跑过去。比喻很多人争相追逐、趋附。含贬义。"],
-["声名鹊起","形容名声迅速提高。"],
-["名声大噪","名声广泛地传播开去。"]
-]],
-["传播与传闻",[
-["以讹传讹","把本来就不正确的话又错误地传出去，结果越传越错。"],
-["无孔不入","比喻见空子就钻；利用一切漏洞或机会（多指做坏事）。"],
-["铺天盖地","形容来势猛，声势大，到处都是。"],
-["道听途说","在路上听来的话，又在路上向人传播。指没有根据的传言。"],
-["街谈巷议","指人们在街头巷尾闲谈议论。"],
-["稗官野史","后用来称小说及不见经传的逸闻琐事的著述。"],
-["逸闻轶事","指世人不大知道而感兴趣的传闻和故事。"],
-["脍炙人口","比喻好的诗文或事物为众人所喜爱和传诵。"],
-["津津乐道","指很有兴趣地谈论。"],
-["喜闻乐见","意思是喜欢听，乐意看。形容很受欢迎。"],
-["深入人心","指思想、理论等广泛地得到人们的理解和接受。"]
-]],
-["消失与重现",[
-["灰飞烟灭","比喻人或事物迅即消失。"],
-["化为乌有","指变得什么都没有。"],
-["子虚乌有","指假设的、不存在的事情。"],
-["稍纵即逝","稍微一放松就消失了。形容时间或机会很容易丢失。"],
-["昙花一现","比喻人或事物存在的时间很短，刚一出现就迅速消失了。"],
-["销声匿迹","指隐藏起来或不公开露面。"],
-["烟消云散","比喻事物全部消失。"],
-["偃旗息鼓","后也比喻事情中止。"],
-["无影无踪","形容完全消失，不知去向。"],
-["死灰复燃","比喻失势的人又重新得势。也比喻已经消亡的事物又重新活动起来。多含贬义。"],
-["卷土重来","比喻失败以后又重新恢复势力；也比喻消失了的人或事物重新出现。"],
-["沉渣泛起","比喻已经绝迹了的腐朽、陈旧事物又重新出现。"],
-["土崩瓦解","像土崩塌，瓦破碎一样，不可收拾。比喻彻底垮台。"],
-["分崩离析","形容家庭、集团、组织或国家分裂瓦解。"]
-]],
-["明显与含糊",[
-["毋庸置疑","用不着怀疑。"],
-["显而易见","事情或道理非常明显，极容易看清楚。"],
-["不言而喻","不用说什么就能明白。"],
-["昭然若揭","形容真相毕露，所有一切都已显现了出来。"],
-["彰明较著","形容极其明显，很容易看清楚。"],
-["有目共睹","形容人人都可以看到，极其明显。"],
-["一目了然","一眼就可以看清楚。"],
-["大张旗鼓","形容群众活动声势和规模很大。"],
-["语焉不详","是指虽然提到了，但说得不详细。"],
-["讳莫如深","指把事情隐瞒得很紧。"],
-["暗度陈仓","意思是指暗中进行某种活动。"],
-["不露声色","意思是心里面的计划或者想法并不通过言语和面部表情直接表现出来。"],
-["闪烁其词","指说话故意含糊其辞、回避真相或要害问题。"]
-]],
-["重视与轻视",[
-["视而不见","指不注意，不重视。也指不理睬，看见了当作没看见。"],
-["置若罔闻","放在一边，好像没有听到。指不加理睬。"],
-["熟视无睹","看惯了就像没看见一样。也指对眼前的事物或现象漠不关心。"],
-["闭目塞听","指不与外界接触，脱离实际。"],
-["充耳不闻","形容故意不听别人的话。也形容对某些事漠不关心。"],
-["置之不理","指放在一边而不予理睬。"],
-["嗤之以鼻","用鼻子发出笑声，表示轻蔑，不以为然。"],
-["视如敝屣","像破烂鞋子一样看待。比喻非常轻视。"],
-["不屑一顾","不值得一看，表示轻视、看不起。"],
-["束之高阁","把东西捆绑起来，放在高高的架子上。比喻弃置不用。"],
-["爱不释手","喜爱得舍不得放手。"],
-["手不释卷","手中一直拿着书籍片刻不放。形容勤勉好学或读书入迷。"],
-["视若珍宝","形容十分珍爱，将其当成无价之宝。"],
-["奉为圭臬","指把某些事物或言论尊奉为准则。"],
-["举足轻重","形容有实力，地位重要，能左右局势的发展。"],
-["无足轻重","指无关紧要。"],
-["细枝末节","比喻事情或问题的细小而无关紧要的部分。"]
-]],
-["熟悉与了解",[
-["驾轻就熟","比喻对所做的事情熟悉，办起来容易。"],
-["轻车熟路","驾着负载很轻的车子，走熟悉的道路。比喻事情又轻松又熟悉，办起来很容易。"],
-["了如指掌","指对事物的了解非常清楚，像把东西放在手掌里让人看一样。"],
-["耳熟能详","指听得多了，也就能详尽地讲述出来。"],
-["如数家珍","如同数自己家藏的珍宝那样清楚。形容对所讲述的东西非常熟悉。"],
-["烂熟于心","心中有数，十分熟悉。"],
-["妇孺皆知","妇女、小孩全都知道。指众所周知。"],
-["家喻户晓","家家户户都知道。形容人人皆知。"],
-["不甚了了","意思是指心里不太明白，不是很清楚。"],
-["默默无闻","意思是指做事无声无息，无人知晓。"],
-["鲜为人知","很少有人知道。"],
-["匪夷所思","形容人的思想、言谈、技艺、事情等离奇，超出寻常。"],
-["不可思议","现多指无法想象，难以理解。"],
-["司空见惯","后比喻常见之事；不足为奇。"],
-["屡见不鲜","经常见到，并不新鲜。"]
-]],
-["看法一致与否",[
-["不足为奇","指某种现象或事物很平常，没有什么特别的。"],
-["习以为常","常做某种事情或常见某种现象，成了习惯，就觉得很平常了。"],
-["见怪不怪","看到奇异的事物，镇定自若，不大惊小怪。"],
-["无独有偶","意思是虽然罕见，但是不止一个，还有可以配对的。"],
-["习焉不察","指经常接触某种事物，反而觉察不到其中存在的问题。"],
-["各持己见","持：抓住不放。各人都坚持自己的意见。"],
-["众说纷纭","人多嘴杂，议论纷纷。"],
-["莫衷一是","不能断定哪个对，哪个不对。也指意见纷纭，分歧很大，不能得出一致的结论。"],
-["不置可否","不说可以，也不说不可以。指不表明自己的态度。"],
-["模棱两可","指不表示明确的态度，或没有明确的主张。"],
-["针锋相对","比喻双方在策略、论点及行动方式等方面尖锐对立。"],
-["各执一词","指不同的人或群体持有不同的说法或观点，且这些观点往往相互对立。"],
-["见仁见智","对同一事物或问题，不同的人因立场、角度或认知差异会产生不同的理解和看法。"],
-["众望所归","意思是用于形容某人威望很高，受到大家敬仰和信赖。"],
-["人心所向","意思是指人民群众所拥护的、向往的事物或者方向。"],
-["不负众望","意思是指为人所信服，很争气，不辜负大家的期望。"],
-["不孚众望","孚：信服。不能使群众信服。"]
-]],
-["从细节看全貌",[
-["以偏概全","用片面的观点看待整体问题。"],
-["一孔之见","从一个小孔里看到的事物。比喻片面的观点见解。多谦称自己的看法。"],
-["管窥蠡测","比喻眼光狭小，见识不广或不自量力。"],
-["管中窥豹","比喻只看到事物的一部分而推测全貌。"],
-["坐井观天","比喻眼界不开阔，见识不广。"],
-["一叶障目","眼睛被一片树叶挡住，指看不到事物的全貌。"],
-["断章取义","引用他人文章或谈话，只截取其中一段的意思，而不顾全文和原意。"],
-["一叶知秋","比喻发现一点预兆就知道事物将来的发展趋势。"],
-["以小见大","通过小事可以看出大节，或通过一小部分看出整体。"],
-["见微知著","指见到事物的苗头，就能知道它的未来发展趋势和实质。"]
-]],
-["看事情透彻",[
-["远见卓识","解释为有远大的眼光和卓越的见解。"],
-["真知灼见","指正确而透彻的认识，高明的见解。"],
-["鞭辟入里","今多形容分析问题透彻，切中要害。"],
-["一针见血","比喻说话直截了当，切中要害。"],
-["一语中的","意思是指一句话就说中要害，一句话就说清了事情的重点。"],
-["字字珠玑","比喻说话或文章的词句非常优美，就像每个字都是珍贵的珍珠一样。"],
-["洞若观火","指清楚得就像看火一样，形容观察事物透彻分明。"],
-["明察秋毫","后多形容人精明，目光敏锐，能洞察一切。"],
-["一览无余","形容一下子就可以看清楚。（侧重看得全）"]
-]],
-["态度与评价",[
-["大有可为","比喻前途极有希望，值得去做。"],
-["无可厚非","意为不可过分指责，表示虽有缺点，但是可以理解或原谅。"],
-["无可非议","意思是没有什么可以指责的，表示言行合乎情理。"],
-["差强人意","还算能振奋心意。形容大致上还能够令人满意。"],
-["毋庸讳言","意思是指用不着隐讳，可以直说的内容。"],
-["缄口不言","封住嘴巴；不开口说话。"],
-["乏善可陈","意思是没有什么好的可以称道的。"]
-]],
-["数量多少",[
-["凤毛麟角","比喻珍贵而稀少的人或事物。"],
-["寥寥无几","形容数量极少。"],
-["屈指可数","弯着手指就可以数出来。形容数目很少。"],
-["寥若晨星","稀少得好像清晨的星星一样。形容很少。"],
-["车载斗量","比喻数量多，不可胜数，多指不足为奇，很常见。"],
-["不胜枚举","不能够一个一个地全部列举出来。形容数量很多。"],
-["俯拾皆是","形容到处都有，很容易取得。"],
-["数不胜数","形容数量极多，数也数不完。"],
-["不一而足","形容所说的事物或现象不止一种，而是很多，不能一一列举。"],
-["五花八门","比喻变化多端或花样繁多。"],
-["包罗万象","形容内容丰富，应有尽有。"],
-["林林总总","形容众多。"],
-["汗牛充栋","形容藏书或者著作极多。"],
-["浩如烟海","形容事物（多指书籍、文献等）数量繁多，极其丰富。"],
-["卷帙浩繁","形容书籍很多或一部书的篇幅很长。"]
-]],
-["建筑与布局",[
-["错落有致","意思是形容事物的布局虽然参差不齐，但却极有情趣，使人看了有好感。"],
-["鳞次栉比","像鱼鳞或梳篦的齿那样紧密地排列着。形容建筑物等密集、排列整齐的样子。"],
-["星罗棋布","意思是像天空中的星星和棋盘上的棋子一样罗列、分布着。形容数量众多，散布的范围很广。"],
-["美轮美奂","多用于形容建筑物雄伟壮观，富丽堂皇。"],
-["富丽堂皇","形容建筑物宏伟豪华。"],
-["雕梁画栋","彩绘装饰得十分华丽的房屋。"]
-]],
-["相同与不同",[
-["如出一辙","好像出自同一车辙。比喻两种事物非常相似。"],
-["大同小异","指事物大体相同，略有差异。"],
-["千篇一律","指文章公式化。也比喻办事按一个格式，非常机械。"],
-["不约而同","后用来指没有事先商量约定而彼此的看法或言行相同。（侧重行为上）"],
-["不谋而合","事先没有商量而彼此的做法或意见却相同。（侧重思想上）"],
-["殊途同归","从不同的道路，走到同一个目的地。比喻采取不同的方法而得到相同的结果。"],
-["异曲同工","比喻不同人的文艺作品同样精彩。也比喻不同的做法有同样的好的效果。"],
-["大相径庭","指彼此相差很远或截然不同。"],
-["泾渭分明","比喻界限清楚、是非分明。"],
-["相去甚远","互相之间存在很大差异和距离。"],
-["判若云泥","意思是高低差别就像天上的云彩和地下的泥土那样悬殊。"],
-["天壤之别","指高天和平地的区别。极言差别之大。"],
-["各有千秋","各自有其可以长久流传的价值。也比喻各有各的优点和特色。"],
-["平分秋色","后比喻双方各得一半。也比喻两方平手，不分上下。"],
-["分庭抗礼","后用来比喻彼此地位或势力相等，平起平坐或互相对立。"]
-]],
-["技艺精湛",[
-["巧夺天工","人工的精巧胜过天然。形容技艺精妙高超。"],
-["精雕细琢","精心细致地雕刻琢磨。形容做事仔细用心。多指艺术品的创作。"],
-["鬼斧神工","形容技艺高超神妙。"],
-["精益求精","原意是已经很精致了，还要更加精致。比喻已经很好还求更好。"],
-["炉火纯青","后用来比喻功夫达到了纯熟完美的境界。"],
-["登堂入室","比喻学识由浅入深，逐步达到很高的成就。"],
-["登峰造极","比喻学问、技艺等已达到最高的境界。"],
-["目无全牛","比喻技艺熟练到了得心应手的境界。"],
-["得心应手","形容技艺纯熟，心手相应，或学识融会贯通。"],
-["粗制滥造","意思是写文章或做东西马虎草率，只求数量，不顾质量。"]
-]],
-["观看欣赏",[
-["蔚为大观","发展成为盛大壮观的景象。形容事物美好繁多，给人一种盛大的印象。"],
-["洋洋大观","形容美好的事物众多丰盛。"],
-["琳琅满目","比喻杰出人才、好文章或精美物品很多。"],
-["引人入胜","带人进入风景优美的地方。形容风景、作品很吸引人。"],
-["叹为观止","赞美所看到的事物好到了极点。"],
-["赏心悦目","指看到美好的景色而心情愉快。"],
-["目不暇接","形容吸引人的事物很多，看不过来。"],
-["眼花缭乱","因看到繁杂的事物而感到迷乱。"],
-["心驰神往","心神奔向所向往的事物。形容一心向往。"],
-["魂牵梦萦","形容思念深切，无法排遣。"]
-]],
-["“说”相关",[
-["侃侃而谈","理直气壮、从容不迫地说话。（褒义词）"],
-["高谈阔论","指漫无边际地大发议论（多含贬义）。"],
-["夸夸其谈","说话或写文章浮夸、不切实际。"],
-["口若悬河","形容能说善辩，话语不断。"],
-["巧舌如簧","意思是舌头灵巧，能言善辩，形容能说会道，善于狡辩。"],
-["巧言令色","用来形容那些擅长使用花言巧语和伪善的面容来取悦他人的人。（含贬义）"],
-["娓娓道来","是一种说话的方式，意思是不紧不慢地、从容地讲述。"],
-["信口雌黄","比喻不顾事实，随口乱说。"],
-["人云亦云","指没有主见或创见。"],
-["拾人牙慧","比喻袭用他人的意见或言论。"],
-["推心置腹","比喻真心待人。"],
-["开诚布公","表示坦白无私，真诚相待，能诚恳坦率地提出自己的看法。"],
-["披肝沥胆","比喻对人对事非常忠诚。"],
-["老调重弹","比喻已经说过的话再说过；也指说话或文章没有新意。"],
-["陈词滥调","陈旧、空泛、不切实际的论调。"],
-["老生常谈","比喻听厌了的没有新鲜意思的话。（也做中性）"]
-]],
-["“演”相关",[
-["绘声绘色","绘：描摹。形容叙述、描写生动逼真。"],
-["活灵活现","意思是形容神情逼真、传神，使人有亲眼所见的感觉。"],
-["惟妙惟肖","形容描写、模仿得非常逼真。"],
-["栩栩如生","形容画作、艺术品形象非常逼真，如同活的一样。"],
-["有声有色","形容说话或表演精彩生动。"],
-["有板有眼","比喻言语、行动有条理或合规矩。有时也比喻做事死板，不懂得灵活掌握。"]
-]],
-["“听”相关",[
-["此起彼伏","这里起来，那里落下。表示频繁地出现或产生。"],
-["经久不息","经过长时间停不下来。"],
-["震耳欲聋","形容声音很大，耳朵都快震聋了。"],
-["人声鼎沸","形容人群的声音吵吵嚷嚷，就像煮开了锅一样。"],
-["沸反盈天","形容喧哗吵闹，一片混乱。"],
-["穿云裂石","形容声音高亢嘹亮。"],
-["佶屈聱牙","指文章读起来不顺口。"],
-["入木三分","形容书法笔力强劲。后也比喻看问题精辟、深刻。"]
-]],
-["“写”相关",[
-["春秋笔法","即用笔曲折而意含褒贬的写作手法。"],
-["皮里阳秋","意思是藏在心里不说出来的言论，表面上不直接发表评论，但实际上内心有着褒贬不同的看法。"],
-["微言大义","意思是包含在精微语言里的深刻的道理。"],
-["字斟句酌","用来形容人在写作或说话时的态度非常认真和细致。"],
-["连篇累牍","形容篇幅过多，文词冗长。"],
-["惜墨如金","意思是爱惜墨就像金子一样，指不轻易动笔。"],
-["删繁就简","意思是去掉删除繁杂部分，使它趋于简明。"],
-["一气呵成","①形容文章的气势首尾贯通。②形容完成整个工作的过程中不间断，不松懈。"],
-["倚马可待","形容文思敏捷，文章写得快。"],
-["一挥而就","指才思敏捷，写字、作文或画画速度很快。"],
-["文不加点","文章不用涂改，一气写成。形容文思敏捷，写作技巧高超。"],
-["只言片语","简短零碎的话语、文字。形容语言文字数量极少。"]
-]],
-["“钱”相关",[
-["身无长物","除自身外再没有多余的东西。形容贫穷。"],
-["一文不名","形容人非常穷困，一文钱都没有。"],
-["一穷二白","比喻基础差，底子薄。"],
-["积贫积弱","意思是长期积累的贫困衰弱，形容极度的贫困和弱小。"],
-["桑枢瓮牖","用桑树做门轴，用瓦罐做窗户，比喻贫苦之家。"],
-["肥马轻裘","裘：皮衣。骑肥壮的马，穿轻暖的皮衣。形容阔绰。"],
-["钟鸣鼎食","形容贵族的豪华排场。"],
-["养尊处优","指生活在有人伺候、条件优裕的环境中。"]
-]],
-["“心”相关",[
-["随遇而安","处在任何环境中，都能安然自得，感到满足。"],
-["安之若素","指身处逆境、遭到困难或遭受挫折时能泰然处之，跟平常一样。"],
-["安贫乐道","安于贫穷，以坚持自己的信念为乐。"],
-["泰然处之","形容毫不在意，沉着镇定。"],
-["从容不迫","不慌不忙，沉着镇定。"],
-["神色自若","外表神态自然，不显露紧张或慌乱。"],
-["无所适从","不知听从哪一个好。指不知该怎么办。（侧重面临选择）"],
-["如坐针毡","像坐在插着针的毡子上。形容心神不定，坐立不安。"],
-["如芒在背","如同芒刺扎于背上，形容焦躁的心情。"],
-["手足无措","手脚不知放到哪里才好。形容举止慌乱，或无法应对。"],
-["杯弓蛇影","将映在酒杯里的弓影误认为蛇。比喻因疑神疑鬼而引起恐惧。"],
-["噤若寒蝉","像深秋的蝉那样一声不吭。比喻因害怕有所顾虑而不敢说话。"],
-["谈虎色变","比喻一提起可怕的事情，脸色就变了。"]
-]],
-["顾忌与无所顾忌",[
-["畏首畏尾","形容做事胆小，多所猜忌顾虑，畏缩不前。"],
-["投鼠忌器","想用东西打老鼠，又怕打坏了近旁的器物。比喻做事有顾忌，不敢放手干。"],
-["肆无忌惮","非常放肆，毫无顾忌和畏惧。"],
-["刨根问底","比喻追究底细。"],
-["顺藤摸瓜","比喻按照某个线索查究事情。"],
-["披沙拣金","从大量数据中筛选有价值信息。"],
-["捕风捉影","比喻说话或做事时用似是而非的迹象做根据。"]
-]],
-["自我评价不当",[
-["妄自菲薄","毫无根据地小看自己。形容自轻自贱。"],
-["自惭形秽","因为自己模样丑陋而感到惭愧。也泛指自己觉得不如别人而感到惭愧。"],
-["自暴自弃","指自己糟蹋自己，自己看不起自己，甘心于落后。"],
-["自怨自艾","原指悔恨并且改正自己的错误，后多指悔恨。"],
-["怨天尤人","指遇到挫折、麻烦时一味抱怨命运和别人，而不寻找自身的原因。"],
-["夜郎自大","比喻妄自尊大。"]
-]],
-["近似成语",[
-["盛气凌人","指以骄横的气势欺负人。"],
-["弹冠相庆","指即将做官而互相庆贺，多用于贬义。"],
-["额手相庆","把手举到额头上互相庆贺。"],
-["优胜劣汰","指生物在生存竞争中适应力强的保存下来，适应力差的被淘汰。"],
-["弱肉强食","弱者的肉是强者的食物。比喻弱者被强者所欺凌、吞并等。"],
-["粉墨登场","化好妆登台演戏。也比喻登上政治舞台，含讥讽义。"],
-["百家争鸣","比喻各种学术派别竞相争辩鸣放。"],
-["百花齐放","各色的鲜花一齐开放。后多比喻文艺上不同的形式和风格自由地发展。"],
-["耸人听闻","指故意夸大或捏造事实，使人听后感到震惊。"],
-["骇人听闻","使人听了非常吃惊、害怕。"]
-]],
-["生僻成语",[
-["不刊之论","不可改动或不可磨灭的言论。"],
-["朝乾夕惕","形容一天到晚勤奋谨慎，没有一点疏忽懈怠。"],
-["曲高和寡","比喻思想、言行、文艺作品等高深，不能为多数人所理解接受。"],
-["阳春白雪","后泛指高雅、不通俗的文学艺术。"],
-["戎马倥偬","形容军务繁忙。"],
-["厉兵秣马","磨好兵器，喂好马。形容准备战斗。"],
-["不容置喙","喙：嘴。不容许插嘴。"],
-["不容置疑","不允许加以怀疑。指绝对真实可信。"],
-["移花接木","把枝条、嫩芽从一种花木嫁接到另一种花木上。比喻暗中更换。"],
-["偷梁换柱","比喻暗中耍手段改变事物内容，以假代真，以劣代优。"],
-["李代桃僵","比喻兄弟相爱相助，患难与共。也比喻以此代彼或代人受过。"],
-["张冠李戴","比喻弄错了事实或对象。"],
-["渊渟岳峙","比喻人品德如渊水深沉，如高山耸立。"],
-["不分畛域","畛域：范围，界限。不分界限、范围。也比喻不分彼此。"],
-["毛举细故","指烦琐地列举小事情，加以责难或攻击。"],
-["吉光片羽","比喻残存的珍贵文物。"],
-["钟灵毓秀","指山川秀美，人才辈出。"],
-["瑕瑜互见","比喻优点、缺点都有。"],
-["太阿倒持","倒拿着剑，把剑柄给别人。比喻把大权交给别人，自己反受其害。"]
-]]
+["中华文明传统文化",[["源远流长","源头远，水流长。也比喻历史悠久。"],["连绵不绝","意思是连续而不断。"],["博大精深","形容学识、思想、理论广博丰富，精湛深刻。"],["历久弥新","指经历长久的时间而更加鲜活，更加有活力，更显价值。"]]],
+["文化传承",[["兼容并蓄","对不同的人或事物都能同时收容保留。"],["一脉相承","由一个血统或一个派别世代相传承袭下来。比喻人或事物间的传承关系。"],["血脉相通","原指有血缘亲属关系。也比喻极亲近的关系。"],["薪火相传","比喻学问和技艺代代相传。比喻师生授受不绝，绵延不尽。"],["不绝如缕","像一根细线那样，似断非断。比喻情势危急。"],["陈陈相因","粮仓里的米谷一年接一年地堆积起来。比喻沿袭老一套，没有改进。"],["口耳相传","口说耳听，递相传授。"],["后继无人","没有继承的人。形容事业缺少接班人。"],["难以为继","难以继续下去。"]]],
+["改革创新",[["继往开来","继承前人的事业，开辟未来的道路。"],["承上启下","接续上面的，引起下面的。也指诗文中连接沟通文字的字句。"],["推陈出新","推去旧的，产生新的。后多指在文化艺术方面去掉旧的糟粕，吸取其精华，创造出新的来。"],["吐故纳新","吐出浊气，吸进新鲜空气。后多比喻扬弃旧的，吸收新的。"],["革故鼎新","指革除旧的，建立新的。多指改朝换代或重大变革。"],["弃旧图新","抛弃旧的，谋求新的。多指由坏的转向好的，离开错误的道路走向正确的道路。"],["去芜存菁","意思是除去杂质、保留精华。"],["除旧布新","意思是清除旧的，建立新的；以新的代替旧的。"],["激浊扬清","强调通过主动干预消除负面因素并弘扬正面价值。"],["另辟蹊径","意思是另外开辟一条路。比喻另创一种风格或方法。"]]],
+["创新做法与构思",[["标新立异","原意为表明新颖的义理，提出与众不同的见解。后指故意提出新奇的见解，表示自己与众不同。"],["与时俱进","与时间一起前进。指不断进取，永不停滞。"],["剑走偏锋","指不走常规，找一些新的、不同以往的办法来解决问题，以求出奇制胜。"],["不拘一格","指不拘泥于一种规格、方式，比喻打破常规。"],["匠心独运","具有独到的创造性。多指文学艺术的创作构思。"],["别出心裁","另外想出与众不同的办法、主意。"],["独树一帜","单独树起一面旗帜。比喻创造独特风格，自成一家。"],["自成一家","指在某一方面的学问或技术有独到的见解或独特的做法，能自成体系。"],["别开生面","比喻另外开创新的局面或新的形式。"],["不落窠臼","意为不落俗套，有独创风格（多用于形容文章或艺术作品）。"]]],
+["守旧不创新",[["墨守成规","形容因循守旧，不肯改变。"],["抱残守缺","固守陈旧残缺的东西不放，形容保守，不知改进。"],["因循守旧","指一直沿用旧办法而不加改变。"],["固步自封","比喻因循守旧，安于现状，不求创新进取。"],["食古不化","指对所学的古代知识理解得不透，不善于按现在的情况来运用。"]]],
+["按规矩办事",[["按图索骥","照着图像去寻找良马。比喻做事死守教条，而不懂得变通。也比喻依据一定的线索去寻找事物。"],["按部就班","原指写文章按类别安排文义，按顺序组织文辞。后指按照一定的次序或部署进行。"],["循规蹈矩","原指遵守规矩，不敢违反。后指拘守旧准则，不敢稍作变动。"],["循规拘礼","遵循规则，拘泥礼节。"],["照本宣科","原指照着书本或讲稿逐字宣读。引申为机械执行既定规则或文本内容，缺乏创造性。"],["循序渐进","指事物的发展或学习工作等按照一定的步骤逐渐深入或提高。"],["有条不紊","条：条理。紊：乱。形容办事很有条理。"]]],
+["处境困难",[["望而生畏","指看见了就害怕。"],["望而却步","形容遇到危险、困难或力所不及的事就往后退缩。"],["畏葸不前","畏惧退缩，不敢前进。"],["进退两难","前进和后退都难。比喻事情无法决定，因而难以行动。"],["骑虎难下","比喻事情遇到困难，迫于形势不能中止，陷入进退两难的境地。"],["进退维谷","指前进或后退都处于困难境地。形容进退两难。"],["瞻前顾后","多用于形容顾虑太多，犹豫不决。"],["踌躇不前","意思为迟疑不决，不敢前进。"],["裹足不前","比喻因心存顾虑而停止行动或不敢向前。"],["举步维艰","指脚行走十分困难。形容已陷入十分艰难的处境。"],["寸步难行","一步也难以行走。形容陷入困难境地，无法进行活动。"]]],
+["形势危险",[["岌岌可危","形容非常危险，快要倾覆或灭亡。"],["危如累卵","比喻形势非常危险，如同堆起来的蛋，随时都有塌下打碎的可能。"],["命悬一线","处境危险，随时可能丧失生命。"],["风雨飘摇","在风雨中飘荡不定。比喻局势动荡不安，很不稳定。"],["危在旦夕","旦夕：早晨和晚上，形容时间短。形容危险就在眼前。"],["危若朝露","危险得像清早的露水一样，太阳一出就要消失，形容面临灭亡，情况危急。"],["风起云涌","形容雄浑磅礴之势；也比喻事物迅速发展，声势浩大。"],["方兴未艾","意思是事物正在发展，尚未达到止境。"]]],
+["事物出现发展衰落",[["雨后春笋","春天下雨后竹笋长得又多又快，比喻新生事物大量涌现和蓬勃发展。"],["横空出世","形容人或物高大，横在空中，浮出人世，或比喻卓尔不群。"],["异军突起","比喻一支新生力量突然崛起。"],["应运而生","指顺应时机而产生。"],["高歌猛进","意思是高声歌唱，勇猛前进；形容在前进的道路上，充满乐观精神。"],["如火如荼","原比喻军容之盛，现在形容旺盛、热烈或激烈。"],["蒸蒸日上","形容事业一天天地向上发展。"],["如日中天","像太阳正运行到正午。比喻正发展到最兴盛的阶段。"],["势如破竹","形容节节胜利，毫无阻碍。"],["突飞猛进","形容发展十分迅速。"],["一日千里","一天跑一千里。也比喻进步、发展很快。"],["日新月异","形容发展变化很快，新事物、新气象不断出现。"],["阪上走丸","指在斜坡上滚弹丸，比喻形势发展迅速或工作进行顺利。"],["层出不穷","接连出现，没有穷尽。"],["日渐式微","事物逐渐地由兴盛而衰落。"],["每况愈下","指情况越来越坏，越来越糟糕。"],["江河日下","比喻事物日趋衰落，情况一天不如一天。"],["水涨船高","水位上涨，船体也随着上升。比喻事物随着它所凭借的基础而增长。"],["此消彼长","指这个下降，那个上升。"],["波澜壮阔","原形容水面辽阔，现比喻声势雄壮或规模宏大。"],["柳暗花明","也比喻在困难中遇到转机。"]]],
+["竞争比较",[["拨云见日","比喻冲破黑暗见到光明。也比喻疑团消除，心里顿时明白。"],["相形见绌","跟同类的人或同类事物相比较，显出很不足。"],["出类拔萃","指人的品德才能出众，高出同类之上。"],["无与伦比","指事物非常完美，没有能够与它相比的同类的东西。"],["脱颖而出","比喻才能完全显露出来。"],["崭露头角","比喻突出地显露出才能。"],["大显身手","充分显示出本领和才能。"],["望其项背","能够看到别人的颈项和脊背。比喻有能力赶得上。（常用于否定句）"],["望尘莫及","指望见前面人马扬起的尘土而追赶不上。比喻远远落在后面，相差甚远。"],["相提并论","把不同的人或不同的事情放在一起谈论或看待。（多用于否定句中）"],["同日而语","指相提并论。（侧重强调时间上的对比，多用于否定句中）"],["等量齐观","等：同等。齐：一样。把不同的事物一律同等看待。"],["一概而论","用同一标准来对待或处理（多用于否定）。"],["力有未逮","指有意愿却做不到。"],["爱莫能助","虽然心中关切同情，却没有力量帮助。"],["鞭长莫及","比喻相隔太远，力量达不到。"],["望洋兴叹","现多比喻做事时因为不胜任或没有条件而感到无可奈何。"]]],
+["能力不足",[["力不从心","心里想做，可是力量够不上。"],["回天乏术","比喻局势或病情严重，已无法挽救。"],["捉襟见肘","形容衣裳破旧。也比喻困难很多，应付不过来。"],["顾此失彼","顾了这个，丢了那个。形容忙乱或慌张的情景。"],["左支右绌","指力量不足，应付了这方面，那方面又出了问题。"],["独木难支","一根木头支不住高大的房子。比喻一个人的力量单薄，维持不住全局。"],["应接不暇","原指景物很多，顾不上观赏。后形容太繁忙，应付不过来。"]]],
+["学习粗浅与领悟",[["浮光掠影","比喻因事物很快消逝而使人对它的印象不深。"],["走马观花","比喻观察事物或者了解情况不深入细致。"],["蜻蜓点水","比喻进行某些动作时只轻轻接触表面。也比喻肤浅不深入。"],["浅尝辄止","只略微尝试一下就停止。比喻做事不求深入。"],["囫囵吞枣","把枣子整个吞下。比喻笼统地接受，不加分析、甄别，不求甚解。"],["不求甚解","后指只求懂个大概，不去深入理会。"],["举一反三","指举出一件事，就可以触类旁通，类推出许多同类事物来。"],["融会贯通","指把各方面的知识、道理融会贯穿，从而获得对事物全面、透彻地理解和领悟。"],["触类旁通","指掌握了某一事物的规律或知识，就能够以此类推，了解同类的其他事物。"]]],
+["搭档配合",[["相辅相成","指两种事物互相辅助，互相促成，缺一不可。"],["相得益彰","两个人或两件事相互配合，双方的能力和作用更能显示出来。"],["锦上添花","指在有彩色花纹的丝织品上再绣上花朵。比喻美上加美，喜上加喜。"],["珠联璧合","后多比喻美好的人及事物凑在一起。"],["互为表里","甲为乙的外表，乙为甲的内里；比喻互相依存，互相接受。"],["交相辉映","各种光亮、色彩相互照耀、映射。"],["相映成趣","相互衬托着，显得很有情趣，很有意思。"],["双峰并峙","比喻在某一领域或文化上同时达到极高成就的两个人物或事物。"],["并行不悖","悖：违反，违背。指同时进行而互相不违背。"],["齐头并进","指几方面同时前进。"],["双管齐下","比喻一件事同时采用两种办法或两件事同时进行。"],["并驾齐驱","比喻相互之间不相上下。"],["一马当先","策马走在最前面。形容率先、领先。"]]],
+["错误抉择与方向",[["本末倒置","比喻把事情的轻重主次颠倒了过来。"],["舍本逐末","比喻放弃根本，追求末节，轻重主次倒置。"],["喧宾夺主","比喻外来的或次要的事物占据了原有的或主要的事物的位置。"],["得不偿失","所得到的抵不上所失去的。"],["因小失大","因：为了。指为了小的利益造成大的损失。"],["因噎废食","比喻因为碰到挫折，连该做的事情也不做了。"],["背道而驰","比喻彼此方向目标完全相反。也比喻背离正确的目标，朝相反的方向走。"],["南辕北辙","比喻行动和目的截然相反。（多形容同一个主语、侧重目标与做法相反）"],["分道扬镳","指分道而行。也比喻思想、志趣不同而各人干各人的事。"]]],
+["错误做法（寓言故事）",[["缘木求鱼","缘木：爬树。比喻方向、方法不对，就不可能达到目的。"],["拔苗助长","比喻违反事物的发展规律，急于求成，反而坏事。"],["越俎代庖","比喻处理超过自己职权范围的事情。"],["削足适履","鞋小脚大，把脚削去一块来凑合鞋的大小。比喻不合理地迁就凑合或不顾具体条件，生搬硬套。"],["闭门造车","关起门来造车子。比喻不管客观情况如何，只凭主观愿望办事。"],["刻舟求剑","比喻拘泥、不变通，不懂得根据实际情况处理问题。"],["守株待兔","比喻心存侥幸，不劳而获。也比喻死守狭隘经验，不知变通。"],["掩耳盗铃","比喻自欺欺人。"],["邯郸学步","比喻一味地模仿别人，不仅没学到本事，反而把原来的本事也丢了。"],["盲人摸象","比喻看问题不全面，以偏概全。"],["与虎谋皮","跟老虎商量取下它的皮来，比喻跟坏人商量要其牺牲自己的利益，是绝对办不到的。"]]],
+["教育影响批评",[["潜移默化","指受到外来影响而在不知不觉中发生变化。"],["耳濡目染","因经常听到看到而不知不觉受到影响。"],["如沐春风","像沐浴在春风里一样，感受到舒适的感觉。"],["润物无声","指有大胸怀者，做了贡献而不张扬，默默奉献。"],["成风化人","通过倡导树立一种社会风气来影响、教育感化社会大众。"],["耳提面命","提着耳朵叮嘱、当面指教，形容教诲殷切。多指恳切地教导。"],["苦口婆心","用来形容一个人善意且耐心地反复劝导他人。"],["循循善诱","指善于有步骤地引导别人。多形容教育得法。"],["诲人不倦","教导人时很有耐心而不知疲倦。"],["春风化雨","比喻良好的教育。多用来称颂师长对学生及晚辈潜移默化的教诲。"],["和风细雨","意思是比喻耐心地和颜悦色地批评或劝说。"],["醍醐灌顶","比喻给人灌输智慧，使人从迷惑中醒悟或彻底觉悟。"],["振聋发聩","比喻唤醒糊涂麻木之人。"],["如履薄冰","形容战战兢兢、小心谨慎的样子。"],["兢兢业业","后多用来形容小心谨慎、不敢懈怠的样子。"],["专心致志","把心思全部放在上面。形容一心一意，精神集中。"]]],
+["工作学习状态",[["殚精竭虑","殚：竭尽。用尽精力和心思。"],["呕心沥血","呕：吐。沥：滴。形容费尽心思。"],["苦心孤诣","指尽心竭力钻研，达到了别人所达不到的地步。"],["废寝忘食","顾不上睡觉，忘记了吃饭。形容对某事专心致志。"],["皓首穷经","钻研经籍直到人老头白。"],["心无旁骛","心思没有另外的追求，形容心思集中，专心致志。"],["乐此不疲","因酷爱干某事而不感觉厌烦。形容对某事特别爱好而沉浸其中。"],["挖空心思","想方设法，费尽心机（多含贬义）。"],["夜以继日","日夜不停地做某事。多形容十分勤奋、勤恳、忙碌。"],["焚膏继晷","点燃灯烛来接替日光照明，形容夜以继日地用功读书或努力工作。"],["夙兴夜寐","早起晚睡，形容勤奋辛劳。"],["目不窥园","形容学习专心致志，十分刻苦。"],["风餐露宿","在风中吃饭，在露天住宿。形容旅途中的辛苦劳累。"],["筚路蓝缕","驾着柴车穿着破旧衣服去开辟山林。现用来形容创业的艰难与辛苦。"],["披星戴月","身披星光，头顶月色。形容早出晚归或连夜赶路。"],["栉风沐雨","形容人辛苦地四处奔波。"],["摩顶放踵","意思是从头顶到脚跟都擦伤了；形容不辞劳苦，不顾身体。"],["胼手胝足","意思是手脚生茧。形容劳动十分辛勤。"],["孜孜不倦","形容勤奋、不知疲倦。"],["孜孜以求","意思是不知疲倦地探求。"]]],
+["正确做法",[["条分缕析","一条条分析。形容分析得有条理，很细致。"],["抽丝剥茧","形容分析事物极为细致，而且一步一步很有层次。"],["深入浅出","指讲话或文章的内容深刻，语言文字却浅显易懂。"],["纲举目张","比喻抓住事物的主要环节，就可带动一切。"],["提纲挈领","意思是抓住事物的关键部分或者核心要点，用简洁明了的方式进行概述。"],["以一持万","形容抓住了关键的环节或因素，从而能够控制和影响整个局面。"],["博采众长","从多方面吸取各家的长处。"],["见贤思齐","指见到有才德的人就想着与他齐平。"],["量力而行","指根据自身的实际能力和条件来决定行动的范围，做事不要超过自己的能力范围。"],["厚积薄发","形容积累丰富的学问而不轻易表现出来。"],["脚踏实地","比喻做事踏实，认真。"],["义不容辞","道义上不容许推辞。指理应接受。"],["责无旁贷","指自己应尽的责任，不能推给别人。"]]],
+["错误做法",[["过犹不及","事情做得过了头，就跟做得不够一样，都不合适。"],["矫枉过正","指纠正偏失错误，超过了应有的限度。"],["于事无补","指某种言行对于解决问题没有帮助。"],["欲速不达","指违背规律、一味求快，反而达不到目的。"],["作茧自缚","蚕吐丝作茧，把自己包在里面。比喻自己束缚了自己或使自己陷入困境。"],["扬汤止沸","比喻不能解决根本问题的做法。"],["隔靴搔痒","比喻说话、做事、写文章不中肯，没有抓住关键。"],["临渊羡鱼","比喻有欲望想得到某种东西，但却没有实际行动。"],["有恃无恐","因有所依仗而毫不害怕。"],["堂而皇之","形容公然而毫不掩饰（多含贬义）。"],["明目张胆","强调公开、毫无顾忌地做坏事，带有明显的贬义。"],["画地为牢","在地上画个圈儿，作为牢狱。比喻局限在小圈子里活动。"],["以邻为壑","比喻把困难、灾祸推给别人。"],["穿凿附会","意思是把讲不通的或不相干的道理、事情硬扯在一起进行解释。"],["亦步亦趋","比喻因缺乏主见，任何事都模仿、追随他人。"],["唯利是图","只要有利可图，什么事都干。"],["隔岸观火","指站在对岸观望火灾；用来比喻对别人的急难不加救助，而采取看热闹的态度。"],["置身事外","把自己放在事情之外。形容毫不关心。"],["袖手旁观","比喻置身事外，既不过问，也不协助别人。"],["作壁上观","比喻站在一旁看着，不动手帮助。"],["坐收渔利","比喻利用别人的矛盾而从中获利。"],["坐享其成","意思为自己不出力而享受别人取得的成果。"],["竭泽而渔","排尽湖中或池中的水捕鱼。比喻取利只顾眼前，不作长远打算。"],["杀鸡取卵","比喻贪图眼前微小的好处而损害长远的利益。"],["寅吃卯粮","比喻经济困难，入不敷出。"],["饮鸩止渴","比喻用有害的方法解决面临的困难，而不顾后果。"],["急功近利","急于求成，贪图眼前的成效和利益。"]]],
+["国家安定与动荡",[["颠沛流离","形容生活困苦，流落异乡，无安身之所。"],["流离失所","形容到处流浪，没有安身的地方。"],["背井离乡","指被迫离开家乡，到外地求生。"],["民不聊生","百姓没有办法生活下去。形容生活极端困苦。"],["安居乐业","指安定愉快地生活和劳动。"],["海晏河清","黄河水清了，大海没有浪了。比喻天下太平。"],["安土重迁","安于本乡本土，不愿轻易迁移。"],["国泰民安","国家太平，人民生活安定。形容社会安定，人民生活幸福。"]]],
+["国际国内关系",[["休戚与共","欢乐，忧愁彼此相关联。形容关系密切同甘共苦。"],["休戚相关","欢乐，忧愁彼此相关联。形容关系密切，利害相关。"],["息息相关","呼吸时进出的气息相互关连。形容关系或联系非常密切。"],["同舟共济","同乘一条船过河。比喻齐心协力渡过困难。"],["同心同德","思想统一，信念一致。形容大家团结一条心。"],["和衷共济","大家同心渡过江河。比喻同心协力，渡过难关。"],["水乳交融","水和乳汁融合在一起。比喻意气相投、感情融洽。"],["相濡以沫","比喻在困境中用微薄的力量相互帮助。"],["守望相助","指彼此关照，互相帮助。"],["一衣带水","现比喻仅隔一水，极其邻近。"],["唇齿相依","嘴唇与牙齿互相依存。比喻关系极为密切。"],["波诡云谲","好像云彩和水波那样，形态不可捉摸。"],["风云变幻","像风和云那样变化莫测。比喻局势多变或情况复杂。"],["纵横捭阖","指在政治、外交上运用手段进行联合或分化。"],["沆瀣一气","泛指臭味相投的人结合在一起。"],["同流合污","后指跟坏人一起干坏事。"]]],
+["政府优秀做法",[["因地制宜","根据不同地方的基本情况，制定相应的办法。"],["量体裁衣","按身材裁剪衣服。也比喻按实际情况办事。"],["对症下药","医生针对病症开方用药。比喻针对问题所在确定解决方法。"],["有的放矢","对着靶子射箭。比喻目的性强，有针对性。"],["因势利导","指顺着事物的发展趋势而加以引导。"],["保驾护航","保护某事物能让其能正常发展。"],["穿针引线","使线的一头通过针眼。比喻从中联系、拉拢。"],["广开言路","指尽量给下面创造发表意见的条件。"],["集思广益","指集中众人的智慧，可以收到更好的效果。"],["正本清源","从根本上整顿，从源头上清理。比喻从根本上加以整顿清理。"]]],
+["合理规划",[["开源节流","开发财源，节省支出，以储蓄财力。"],["降本增效","在企业管理中通过一系列措施来实现成本的降低和效益的增加。"],["精打细算","意思是精密地计划，详细地计算。指在使用人力、物力时计算得很精细。"],["细水长流","比喻节约使用财物，使经常不缺用。也比喻一点一滴不间断地做某件事。"],["量入为出","根据收入的情况来安排支出。"]]],
+["政策措施的成效",[["立竿见影","在阳光下竖起竹竿，立刻就能看到它的影子。比喻效果显著迅速。"],["一劳永逸","指辛苦一次把事情办好，以后就不用费力了。"],["行之有效","实行起来有成效。指某种方法或措施已经实行过，证明很有效用。"],["一蹴而就","踏一步就可以获得成功，比喻事情很容易做。（多用于否定句中）"],["一步登天","比喻一下达到很高的境界、程度。也比喻人一下子爬上高位。"],["迎刃而解","比喻主要问题解决了，其他的问题就很容易解决。"],["事半功倍","形容费力小，收效大。"],["釜底抽薪","从锅底下抽出柴火。比喻从根本上解决问题。"],["标本兼治","从枝节和根本方面都得到治理。"],["触手可及","伸手便可接触到。形容距离很近。"],["唾手可得","往手上吐唾沫。比喻极容易得到。"],["手到擒来","一出手就把人捉住。形容做事毫不费力或很有把握。"],["信手拈来","随手拿来，多指写文章时能自由纯熟地选用词语或应用典故、素材。"],["游刃有余","比喻工作熟练，实际经验很丰富，解决困难问题毫不费事。"],["束手无策","手被捆住，无法应对。形容遇到问题没有解决的办法。"],["一筹莫展","一点计算也施展不出。形容没有一点办法。"]]],
+["领导力",[["功亏一篑","比喻做事情只差最后一点而前功尽弃。"],["事与愿违","事实与主观愿望相反。"],["适得其反","结果与愿望恰好相反。"],["功败垂成","事情在将要成功的时候失败了。含惋惜意。"],["失之交臂","形容当面错过。"],["高屋建瓴","形容居高临下，不可阻挡的形势。"],["高瞻远瞩","登高望远。形容目光远大。"],["深谋远虑","计谋深远，考虑周密。"],["审时度势","观察时机，估计发展趋势。用来指对形势有洞察力。"],["运筹帷幄","指在后方指挥、筹划。"],["统筹兼顾","意思是统筹一切，全面照顾。"],["身体力行","指亲身体验，努力实践。"],["亲历亲为","亲自参与，不由别人来代替。"],["克己奉公","克制自己的私心，一心为公。"],["以身作则","自己以行动给大家做出榜样。"],["上行下效","指上面的人怎么做，下面的人就跟着怎么干。"],["事必躬亲","凡事都一定要自己亲自去做。"],["一以贯之","指做人做事，按照一个道理，从始至终都不会改变。"],["矢志不渝","指立下志愿，绝不改变。"],["坚定不移","意思是稳定坚强，毫不动摇；不放弃，不改变自己的想法。"],["前仆后继","前面的人倒下了，后面的人继续跟上去。英勇斗争，不怕牺牲。"],["视死如归","把死看得像回家一样平常。形容不怕牺牲生命。"],["大义凛然","形容为了坚持真理而表现出的严峻不可侵犯的样子。"],["勇往直前","勇敢地一直前进。"],["挺身而出","形容面对着艰难或危险的事情，勇敢地站出来。"],["踔厉奋发","形容精神振奋，斗志昂扬。"],["笃行不怠","意思是切实履行自己所学的内容，不感到倦怠。"],["赓续前行","意思是指不断地延续和发展，保持进步的态度和生活方式。"],["奋楫争先","意思是奋力划动船桨的人争先恐后走在前头。"],["砥砺前行","经历磨炼，克服困难，往前进步的意思。"],["勇毅前行","意思是勇敢并且坚毅地向前进步或发展。"],["一鼓作气","比喻趁劲头大的时候鼓起干劲，一口气把工作做完。"]]],
+["干部易犯错误",[["好高骛远","指不切实际地追求过高、过远的目标。"],["好大喜功","喜欢做大事、立大功。多形容浮夸、不切实际的行为。"],["沽名钓誉","比喻故意矫情做作，用手段猎取名声或赞誉。"],["附庸风雅","指缺乏文化修养的人为了装点门面而结交文人，参加有关文化活动。"],["独善其身","指只顾保持自身修养而不顾他人或全局。"],["明哲保身","指聪明有智慧之人，善于趋安避危，保全自身。也指为保全个人利益而回避原则问题。"],["虚与委蛇","指对人虚情假意，敷衍应酬。"],["委曲求全","曲意迁就，以求事成，或保全大局。"],["敷衍塞责","做事马虎，应付一下以搪塞责任。"],["曲意逢迎","违背自己的本心，千方百计迎合或讨好别人。"],["投其所好","意思是迎合别人的喜好。"],["阿谀奉承","为讨好而说好听的话恭维别人。"],["趋炎附势","奉承和依附有权有势的人。"],["如蚁附膻","比喻许多臭味相投的人追求不好的事物。也比喻许多人依附有钱有势的人。"],["兴师动众","现多指动用很多人力做某件事。"],["劳民伤财","意思是既使人民劳苦，又耗费钱财。"],["朝令夕改","形容政令无常。也形容主张、办法等经常改变。"],["粗枝大叶","意思是比喻工作粗糙，不认真细致，马虎大意。"],["大而化之","形容做事情不够谨慎，疏忽大意。"],["哗众取宠","用浮夸的言词或做作的行动去迎合群众，以博取好感和支持。"],["重蹈覆辙","比喻不吸取失败的教训，重犯以前的错误。"]]],
+["对待错误的态度",[["从谏如流","听从规劝像流水一样自然。形容乐于接受别人的批评意见。"],["从善如流","形容能迅速地接受别人的好意见。"],["闻过则喜","听到别人批评自己的缺点或错误，表示欢迎和高兴。指虚心接受意见。"],["虚怀若谷","胸怀像山谷一样深广。形容十分谦虚，能容纳别人的意见。"],["文过饰非","用漂亮的言词掩饰自己的过失和错误。"],["怙恶不悛","坚持作恶，不肯悔改。"],["欲盖弥彰","想掩盖坏事的真相，结果反而更明显地暴露出来。"],["刚愎自用","十分固执自信，不考虑别人的意见。"],["固执己见","顽固地坚持自己的意见，不肯改变。"],["洗心革面","比喻彻底悔改。"],["脱胎换骨","现比喻通过教育，思想得到彻底改造。"],["改头换面","比喻只改变形式，而内容、实质不变。"]]],
+["改变与不变",[["一成不变","指事物一形成就不再改变。（多用于否定句中）"],["亘古不变","从古至今永远也不会改变。"],["改弦更张","比喻改革制度或变更计划、方法。"],["改弦易辙","比喻改变方向或做法。"],["变幻莫测","变化奇特，不可预测。"],["瞬息万变","形容变化很多很快。"],["经久不衰","形容某事或某人经历很长时间仍旧保持较高的旺盛状态。"],["长盛不衰","长久兴盛而不衰败，比喻长时间保持旺盛的势头。"],["今非昔比","现在不能和过去相比。形容变化大。（多形容现在比过去好）"],["天翻地覆","形容变化巨大。也形容闹得很凶。"],["时过境迁","时间过去了，环境或情况也随之改变了。"],["沧海桑田","大海变为桑田，桑田变为大海。比喻世事变化非常大。"],["斗转星移","指岁月流逝。"],["白云苍狗","比喻世事变化无常。"],["恍如隔世","指一种因人事或景物变化很大而引起的感触。"],["根深蒂固","比喻基础稳固。（中性）"],["积习难改","长期形成的某种习惯，很难改变。"],["积重难返","积习深重，难以改变。多指长期存在的恶习、弊端已经发展到了难以革除的地步。"],["顺势而为","顺应形势做事情。"],["大势所趋","整个局势发展的方向。"],["势在必行","客观形势决定必须这样做。"],["随波逐流","随着波浪起伏，跟着流水漂荡。比喻自己没有主见，只是随着别人走。"],["因陋就简","指在条件有限的情况下，利用现有简陋条件将就办事。"],["推波助澜","比喻推动、助长事物的声势及发展。（中性词）"],["顺水推舟","顺着水流的方向推船。比喻顺应某个趋势说话办事。"]]],
+["自然会发生",[["理所当然","指从道理上讲，应该如此。"],["顺理成章","比喻随着某种情况的发展而自然产生的结果。"],["天经地义","指天地间理所当然而不能改变的道理。"],["水到渠成","比喻当条件成熟时，事情会自然成功，并不需要强求。"],["顺其自然","意思是顺着事物本来的性质自然发展。"]]],
+["提早准备和补救",[["未雨绸缪","绸缪：缠绕，引申指修缮。比喻事先做好防备工作。"],["常备不懈","意思是时刻准备着，毫不松懈。"],["防患未然","在祸患还没有发生之前就进行防备。"],["防微杜渐","指在不良的事物刚刚露出苗头时，就加以制止和杜绝，不让它发展下去。"],["居安思危","处在安定的环境时而能想到可能会出现的危难。"],["有备无患","指事先有准备，才可以避免祸患。"],["曲突徙薪","比喻事先采取措施，才能防止灾祸。"],["高枕无忧","垫高枕头睡觉，无所忧虑。"],["临渴掘井","感到口渴才挖井。比喻平时没有准备，事到临头才想办法。"],["江心补漏","指船到江心才补漏洞。比喻临到紧急关头才设法补救，为时已晚。"],["亡羊补牢","比喻出了问题以后及时想办法补救，以免继续受损失。"]]],
+["办公与管理",[["尾大不掉","比喻属下势力强大，不服从指挥调度。也比喻事情前轻后重，难以驾驭的现象。"],["各行其是","指各人按照自己认为正确的去做。"],["各自为政","各人按自己的主张办事。"],["人浮于事","指人员的数目超过工作的需要。"],["如鱼得水","比喻得到跟自己非常投合的人或对自己很适合的环境。"],["面面俱到","各方面都照顾得很周到。"],["独当一面","意思是单独负责一个方面的工作或任务。"]]],
+["空谈与虚幻",[["纸上谈兵","比喻空谈理论，不能解决实际问题。"],["无根之木","意思是比喻没有根据或基础的事物。"],["坐而论道","意思是坐着空谈大道理。指口头说说，不见行动。"],["水中捞月","指在水中捞月亮；比喻去做根本做不到的事情，只能徒劳无功。"],["画饼充饥","后多用来比喻以空想来安慰自己。"],["空中楼阁","后多用来比喻虚构的事物或脱离实际的空想。"],["镜花水月","镜子里的花，水里的月亮。比喻虚幻的东西。"],["海市蜃楼","比喻虚无缥缈而不实际存在的事物。"]]],
+["来者众多与冷清",[["接踵而至","形容人接连而来或事情持续发生。"],["络绎不绝","形容车船人马等前后相接，往来不断。"],["纷至沓来","形容连续不断地纷纷到来。"],["蜂拥而至","像一窝蜂似地一拥而来。形容很多人乱哄哄地朝一个地方聚拢。"],["门庭若市","门口和庭院就像集市一样，热闹非凡。形容往来的人很多。"],["无人问津","没有人来询问渡口。比喻没人过问、受到冷落。"],["门庭冷落","形容十分冷落，宾客稀少。"],["门可罗雀","大门之前可以张起网来捕麻雀。形容十分冷落，宾客稀少。"]]],
+["人多热闹与孤独",[["不期而遇","没约定而意外相遇。"],["萍水相逢","比喻从不认识的人偶然相遇。"],["不期而至","指事先没有约定而意外到来，没有预料地到来。"],["如影随形","好像影子总是跟着身体一样。比喻两个人关系亲密，常在一起。"],["熙熙攘攘","形容人来人往，纷杂拥挤。"],["人头攒动","一般用于形容某些地方人口密度较大，但程度不如人山人海高。"],["人山人海","形容聚集的人非常多。"],["车水马龙","车像流水，马如游龙。形容车马来来往往的热闹景象。"],["川流不息","形容行人、车马很多，像水流一样连续不断。"],["万人空巷","指家家户户的人都从巷里出来了。多形容庆祝、欢迎等盛况。"],["孑然一身","指孤身一人。（常用褒义，形容追寻事业或理想）"],["形影相吊","只有自己的身体和影子相互慰问。形容无依无靠，非常孤单。"],["形单影只","形容孤独，没有伴侣。"],["人迹罕至","指偏僻荒凉、少有人到的地方。"]]],
+["好坏掺杂",[["参差不齐","形容不一致、有差别。"],["泥沙俱下","泥土和沙子一同随水冲了下来。比喻人或事物好坏混杂在一起。"],["良莠不齐","指好人、坏人混在一起。"],["鱼龙混杂","比喻坏人和好人混在一起。"],["鱼目混珠","用鱼眼睛假冒珍珠。比喻以假乱真。"],["滥竽充数","比喻没有真实本领的人，混在行家队伍里充数。"],["买椟还珠","比喻没有眼光，不识货，取舍失当。"]]],
+["流行与名声",[["蔚然成风","形容一种事物逐渐发展流行，形成风气。（多含褒义）"],["风靡一时","形容某一种事物在一个时期内非常流行。（中性）"],["如雷贯耳","形容人的名声很大。"],["炙手可热","手一靠近就感觉很烫，比喻气焰盛，权势大。"],["名噪一时","一时名声很大。指名声传扬于一个时期。"],["闻名遐迩","形容名声很大，主要指远近闻名。"],["靡然成风","指相互跟风，群起效尤而成风气，贬义词，多指不好的风气。"],["大行其道","新潮事物流行成为一种风尚。"],["甚嚣尘上","形容对某事议论纷纷。（中性词，多贬义）"],["煊赫一时","意思是在一段时间内名声威势很盛，含贬义。"],["趋之若鹜","像鸭子一样成群地跑过去。比喻很多人争相追逐、趋附。含贬义。"],["声名鹊起","形容名声迅速提高。"],["名声大噪","名声广泛地传播开去。"]]],
+["传播与传闻",[["以讹传讹","把本来就不正确的话又错误地传出去，结果越传越错。"],["无孔不入","比喻见空子就钻；利用一切漏洞或机会（多指做坏事）。"],["铺天盖地","形容来势猛，声势大，到处都是。"],["道听途说","在路上听来的话，又在路上向人传播。指没有根据的传言。"],["街谈巷议","指人们在街头巷尾闲谈议论。"],["稗官野史","后用来称小说及不见经传的逸闻琐事的著述。"],["逸闻轶事","指世人不大知道而感兴趣的传闻和故事。"],["脍炙人口","比喻好的诗文或事物为众人所喜爱和传诵。"],["津津乐道","指很有兴趣地谈论。"],["喜闻乐见","意思是喜欢听，乐意看。形容很受欢迎。"],["深入人心","指思想、理论等广泛地得到人们的理解和接受。"]]],
+["消失与重现",[["灰飞烟灭","比喻人或事物迅即消失。"],["化为乌有","指变得什么都没有。"],["子虚乌有","指假设的、不存在的事情。"],["稍纵即逝","稍微一放松就消失了。形容时间或机会很容易丢失。"],["昙花一现","比喻人或事物存在的时间很短，刚一出现就迅速消失了。"],["销声匿迹","指隐藏起来或不公开露面。"],["烟消云散","比喻事物全部消失。"],["偃旗息鼓","后也比喻事情中止。"],["无影无踪","形容完全消失，不知去向。"],["死灰复燃","比喻失势的人又重新得势。也比喻已经消亡的事物又重新活动起来。多含贬义。"],["卷土重来","比喻失败以后又重新恢复势力；也比喻消失了的人或事物重新出现。"],["沉渣泛起","比喻已经绝迹了的腐朽、陈旧事物又重新出现。"],["土崩瓦解","像土崩塌，瓦破碎一样，不可收拾。比喻彻底垮台。"],["分崩离析","形容家庭、集团、组织或国家分裂瓦解。"]]],
+["明显与含糊",[["毋庸置疑","用不着怀疑。"],["显而易见","事情或道理非常明显，极容易看清楚。"],["不言而喻","不用说什么就能明白。"],["昭然若揭","形容真相毕露，所有一切都已显现了出来。"],["彰明较著","形容极其明显，很容易看清楚。"],["有目共睹","形容人人都可以看到，极其明显。"],["一目了然","一眼就可以看清楚。"],["大张旗鼓","形容群众活动声势和规模很大。"],["语焉不详","是指虽然提到了，但说得不详细。"],["讳莫如深","指把事情隐瞒得很紧。"],["暗度陈仓","意思是指暗中进行某种活动。"],["不露声色","意思是心里面的计划或者想法并不通过言语和面部表情直接表现出来。"],["闪烁其词","指说话故意含糊其辞、回避真相或要害问题。"]]],
+["重视与轻视",[["视而不见","指不注意，不重视。也指不理睬，看见了当作没看见。"],["置若罔闻","放在一边，好像没有听到。指不加理睬。"],["熟视无睹","看惯了就像没看见一样。也指对眼前的事物或现象漠不关心。"],["闭目塞听","指不与外界接触，脱离实际。"],["充耳不闻","形容故意不听别人的话。也形容对某些事漠不关心。"],["置之不理","指放在一边而不予理睬。"],["嗤之以鼻","用鼻子发出笑声，表示轻蔑，不以为然。"],["视如敝屣","像破烂鞋子一样看待。比喻非常轻视。"],["不屑一顾","不值得一看，表示轻视、看不起。"],["束之高阁","把东西捆绑起来，放在高高的架子上。比喻弃置不用。"],["爱不释手","喜爱得舍不得放手。"],["手不释卷","手中一直拿着书籍片刻不放。形容勤勉好学或读书入迷。"],["视若珍宝","形容十分珍爱，将其当成无价之宝。"],["奉为圭臬","指把某些事物或言论尊奉为准则。"],["举足轻重","形容有实力，地位重要，能左右局势的发展。"],["无足轻重","指无关紧要。"],["细枝末节","比喻事情或问题的细小而无关紧要的部分。"]]],
+["熟悉与了解",[["驾轻就熟","比喻对所做的事情熟悉，办起来容易。"],["轻车熟路","驾着负载很轻的车子，走熟悉的道路。比喻事情又轻松又熟悉，办起来很容易。"],["了如指掌","指对事物的了解非常清楚，像把东西放在手掌里让人看一样。"],["耳熟能详","指听得多了，也就能详尽地讲述出来。"],["如数家珍","如同数自己家藏的珍宝那样清楚。形容对所讲述的东西非常熟悉。"],["烂熟于心","心中有数，十分熟悉。"],["妇孺皆知","妇女、小孩全都知道。指众所周知。"],["家喻户晓","家家户户都知道。形容人人皆知。"],["不甚了了","意思是指心里不太明白，不是很清楚。"],["默默无闻","意思是指做事无声无息，无人知晓。"],["鲜为人知","很少有人知道。"],["匪夷所思","形容人的思想、言谈、技艺、事情等离奇，超出寻常。"],["不可思议","现多指无法想象，难以理解。"],["司空见惯","后比喻常见之事；不足为奇。"],["屡见不鲜","经常见到，并不新鲜。"]]],
+["看法一致与否",[["不足为奇","指某种现象或事物很平常，没有什么特别的。"],["习以为常","常做某种事情或常见某种现象，成了习惯，就觉得很平常了。"],["见怪不怪","看到奇异的事物，镇定自若，不大惊小怪。"],["无独有偶","意思是虽然罕见，但是不止一个，还有可以配对的。"],["习焉不察","指经常接触某种事物，反而觉察不到其中存在的问题。"],["各持己见","持：抓住不放。各人都坚持自己的意见。"],["众说纷纭","人多嘴杂，议论纷纷。"],["莫衷一是","不能断定哪个对，哪个不对。也指意见纷纭，分歧很大，不能得出一致的结论。"],["不置可否","不说可以，也不说不可以。指不表明自己的态度。"],["模棱两可","指不表示明确的态度，或没有明确的主张。"],["针锋相对","比喻双方在策略、论点及行动方式等方面尖锐对立。"],["各执一词","指不同的人或群体持有不同的说法或观点，且这些观点往往相互对立。"],["见仁见智","对同一事物或问题，不同的人因立场、角度或认知差异会产生不同的理解和看法。"],["众望所归","意思是用于形容某人威望很高，受到大家敬仰和信赖。"],["人心所向","意思是指人民群众所拥护的、向往的事物或者方向。"],["不负众望","意思是指为人所信服，很争气，不辜负大家的期望。"],["不孚众望","孚：信服。不能使群众信服。"]]],
+["从细节看全貌",[["以偏概全","用片面的观点看待整体问题。"],["一孔之见","从一个小孔里看到的事物。比喻片面的观点见解。多谦称自己的看法。"],["管窥蠡测","比喻眼光狭小，见识不广或不自量力。"],["管中窥豹","比喻只看到事物的一部分而推测全貌。"],["坐井观天","比喻眼界不开阔，见识不广。"],["一叶障目","眼睛被一片树叶挡住，指看不到事物的全貌。"],["断章取义","引用他人文章或谈话，只截取其中一段的意思，而不顾全文和原意。"],["一叶知秋","比喻发现一点预兆就知道事物将来的发展趋势。"],["以小见大","通过小事可以看出大节，或通过一小部分看出整体。"],["见微知著","指见到事物的苗头，就能知道它的未来发展趋势和实质。"]]],
+["看事情透彻",[["远见卓识","解释为有远大的眼光和卓越的见解。"],["真知灼见","指正确而透彻的认识，高明的见解。"],["鞭辟入里","今多形容分析问题透彻，切中要害。"],["一针见血","比喻说话直截了当，切中要害。"],["一语中的","意思是指一句话就说中要害，一句话就说清了事情的重点。"],["字字珠玑","比喻说话或文章的词句非常优美，就像每个字都是珍贵的珍珠一样。"],["洞若观火","指清楚得就像看火一样，形容观察事物透彻分明。"],["明察秋毫","后多形容人精明，目光敏锐，能洞察一切。"],["一览无余","形容一下子就可以看清楚。（侧重看得全）"]]],
+["态度与评价",[["大有可为","比喻前途极有希望，值得去做。"],["无可厚非","意为不可过分指责，表示虽有缺点，但是可以理解或原谅。"],["无可非议","意思是没有什么可以指责的，表示言行合乎情理。"],["差强人意","还算能振奋心意。形容大致上还能够令人满意。"],["毋庸讳言","意思是指用不着隐讳，可以直说的内容。"],["缄口不言","封住嘴巴；不开口说话。"],["乏善可陈","意思是没有什么好的可以称道的。"]]],
+["数量多少",[["凤毛麟角","比喻珍贵而稀少的人或事物。"],["寥寥无几","形容数量极少。"],["屈指可数","弯着手指就可以数出来。形容数目很少。"],["寥若晨星","稀少得好像清晨的星星一样。形容很少。"],["车载斗量","比喻数量多，不可胜数，多指不足为奇，很常见。"],["不胜枚举","不能够一个一个地全部列举出来。形容数量很多。"],["俯拾皆是","形容到处都有，很容易取得。"],["数不胜数","形容数量极多，数也数不完。"],["不一而足","形容所说的事物或现象不止一种，而是很多，不能一一列举。"],["五花八门","比喻变化多端或花样繁多。"],["包罗万象","形容内容丰富，应有尽有。"],["林林总总","形容众多。"],["汗牛充栋","形容藏书或者著作极多。"],["浩如烟海","形容事物（多指书籍、文献等）数量繁多，极其丰富。"],["卷帙浩繁","形容书籍很多或一部书的篇幅很长。"]]],
+["建筑与布局",[["错落有致","意思是形容事物的布局虽然参差不齐，但却极有情趣，使人看了有好感。"],["鳞次栉比","像鱼鳞或梳篦的齿那样紧密地排列着。形容建筑物等密集、排列整齐的样子。"],["星罗棋布","意思是像天空中的星星和棋盘上的棋子一样罗列、分布着。形容数量众多，散布的范围很广。"],["美轮美奂","多用于形容建筑物雄伟壮观，富丽堂皇。"],["富丽堂皇","形容建筑物宏伟豪华。"],["雕梁画栋","彩绘装饰得十分华丽的房屋。"]]],
+["相同与不同",[["如出一辙","好像出自同一车辙。比喻两种事物非常相似。"],["大同小异","指事物大体相同，略有差异。"],["千篇一律","指文章公式化。也比喻办事按一个格式，非常机械。"],["不约而同","后用来指没有事先商量约定而彼此的看法或言行相同。（侧重行为上）"],["不谋而合","事先没有商量而彼此的做法或意见却相同。（侧重思想上）"],["殊途同归","从不同的道路，走到同一个目的地。比喻采取不同的方法而得到相同的结果。"],["异曲同工","比喻不同人的文艺作品同样精彩。也比喻不同的做法有同样的好的效果。"],["大相径庭","指彼此相差很远或截然不同。"],["泾渭分明","比喻界限清楚、是非分明。"],["相去甚远","互相之间存在很大差异和距离。"],["判若云泥","意思是高低差别就像天上的云彩和地下的泥土那样悬殊。"],["天壤之别","指高天和平地的区别。极言差别之大。"],["各有千秋","各自有其可以长久流传的价值。也比喻各有各的优点和特色。"],["平分秋色","后比喻双方各得一半。也比喻两方平手，不分上下。"],["分庭抗礼","后用来比喻彼此地位或势力相等，平起平坐或互相对立。"]]],
+["技艺精湛",[["巧夺天工","人工的精巧胜过天然。形容技艺精妙高超。"],["精雕细琢","精心细致地雕刻琢磨。形容做事仔细用心。多指艺术品的创作。"],["鬼斧神工","形容技艺高超神妙。"],["精益求精","原意是已经很精致了，还要更加精致。比喻已经很好还求更好。"],["炉火纯青","后用来比喻功夫达到了纯熟完美的境界。"],["登堂入室","比喻学识由浅入深，逐步达到很高的成就。"],["登峰造极","比喻学问、技艺等已达到最高的境界。"],["目无全牛","比喻技艺熟练到了得心应手的境界。"],["得心应手","形容技艺纯熟，心手相应，或学识融会贯通。"],["粗制滥造","意思是写文章或做东西马虎草率，只求数量，不顾质量。"]]],
+["观看欣赏",[["蔚为大观","发展成为盛大壮观的景象。形容事物美好繁多，给人一种盛大的印象。"],["洋洋大观","形容美好的事物众多丰盛。"],["琳琅满目","比喻杰出人才、好文章或精美物品很多。"],["引人入胜","带人进入风景优美的地方。形容风景、作品很吸引人。"],["叹为观止","赞美所看到的事物好到了极点。"],["赏心悦目","指看到美好的景色而心情愉快。"],["目不暇接","形容吸引人的事物很多，看不过来。"],["眼花缭乱","因看到繁杂的事物而感到迷乱。"],["心驰神往","心神奔向所向往的事物。形容一心向往。"],["魂牵梦萦","形容思念深切，无法排遣。"]]],
+["“说”相关",[["侃侃而谈","理直气壮、从容不迫地说话。（褒义词）"],["高谈阔论","指漫无边际地大发议论（多含贬义）。"],["夸夸其谈","说话或写文章浮夸、不切实际。"],["口若悬河","形容能说善辩，话语不断。"],["巧舌如簧","意思是舌头灵巧，能言善辩，形容能说会道，善于狡辩。"],["巧言令色","用来形容那些擅长使用花言巧语和伪善的面容来取悦他人的人。（含贬义）"],["娓娓道来","是一种说话的方式，意思是不紧不慢地、从容地讲述。"],["信口雌黄","比喻不顾事实，随口乱说。"],["人云亦云","指没有主见或创见。"],["拾人牙慧","比喻袭用他人的意见或言论。"],["推心置腹","比喻真心待人。"],["开诚布公","表示坦白无私，真诚相待，能诚恳坦率地提出自己的看法。"],["披肝沥胆","比喻对人对事非常忠诚。"],["老调重弹","比喻已经说过的话再说过；也指说话或文章没有新意。"],["陈词滥调","陈旧、空泛、不切实际的论调。"],["老生常谈","比喻听厌了的没有新鲜意思的话。（也做中性）"]]],
+["“演”相关",[["绘声绘色","绘：描摹。形容叙述、描写生动逼真。"],["活灵活现","意思是形容神情逼真、传神，使人有亲眼所见的感觉。"],["惟妙惟肖","形容描写、模仿得非常逼真。"],["栩栩如生","形容画作、艺术品形象非常逼真，如同活的一样。"],["有声有色","形容说话或表演精彩生动。"],["有板有眼","比喻言语、行动有条理或合规矩。有时也比喻做事死板，不懂得灵活掌握。"]]],
+["“听”相关",[["此起彼伏","这里起来，那里落下。表示频繁地出现或产生。"],["经久不息","经过长时间停不下来。"],["震耳欲聋","形容声音很大，耳朵都快震聋了。"],["人声鼎沸","形容人群的声音吵吵嚷嚷，就像煮开了锅一样。"],["沸反盈天","形容喧哗吵闹，一片混乱。"],["穿云裂石","形容声音高亢嘹亮。"],["佶屈聱牙","指文章读起来不顺口。"],["入木三分","形容书法笔力强劲。后也比喻看问题精辟、深刻。"]]],
+["“写”相关",[["春秋笔法","即用笔曲折而意含褒贬的写作手法。"],["皮里阳秋","意思是藏在心里不说出来的言论，表面上不直接发表评论，但实际上内心有着褒贬不同的看法。"],["微言大义","意思是包含在精微语言里的深刻的道理。"],["字斟句酌","用来形容人在写作或说话时的态度非常认真和细致。"],["连篇累牍","形容篇幅过多，文词冗长。"],["惜墨如金","意思是爱惜墨就像金子一样，指不轻易动笔。"],["删繁就简","意思是去掉删除繁杂部分，使它趋于简明。"],["一气呵成","①形容文章的气势首尾贯通。②形容完成整个工作的过程中不间断，不松懈。"],["倚马可待","形容文思敏捷，文章写得快。"],["一挥而就","指才思敏捷，写字、作文或画画速度很快。"],["文不加点","文章不用涂改，一气写成。形容文思敏捷，写作技巧高超。"],["只言片语","简短零碎的话语、文字。形容语言文字数量极少。"]]],
+["“钱”相关",[["身无长物","除自身外再没有多余的东西。形容贫穷。"],["一文不名","形容人非常穷困，一文钱都没有。"],["一穷二白","比喻基础差，底子薄。"],["积贫积弱","意思是长期积累的贫困衰弱，形容极度的贫困和弱小。"],["桑枢瓮牖","用桑树做门轴，用瓦罐做窗户，比喻贫苦之家。"],["肥马轻裘","裘：皮衣。骑肥壮的马，穿轻暖的皮衣。形容阔绰。"],["钟鸣鼎食","形容贵族的豪华排场。"],["养尊处优","指生活在有人伺候、条件优裕的环境中。"]]],
+["“心”相关",[["随遇而安","处在任何环境中，都能安然自得，感到满足。"],["安之若素","指身处逆境、遭到困难或遭受挫折时能泰然处之，跟平常一样。"],["安贫乐道","安于贫穷，以坚持自己的信念为乐。"],["泰然处之","形容毫不在意，沉着镇定。"],["从容不迫","不慌不忙，沉着镇定。"],["神色自若","外表神态自然，不显露紧张或慌乱。"],["无所适从","不知听从哪一个好。指不知该怎么办。（侧重面临选择）"],["如坐针毡","像坐在插着针的毡子上。形容心神不定，坐立不安。"],["如芒在背","如同芒刺扎于背上，形容焦躁的心情。"],["手足无措","手脚不知放到哪里才好。形容举止慌乱，或无法应对。"],["杯弓蛇影","将映在酒杯里的弓影误认为蛇。比喻因疑神疑鬼而引起恐惧。"],["噤若寒蝉","像深秋的蝉那样一声不吭。比喻因害怕有所顾虑而不敢说话。"],["谈虎色变","比喻一提起可怕的事情，脸色就变了。"]]],
+["顾忌与无所顾忌",[["畏首畏尾","形容做事胆小，多所猜忌顾虑，畏缩不前。"],["投鼠忌器","想用东西打老鼠，又怕打坏了近旁的器物。比喻做事有顾忌，不敢放手干。"],["肆无忌惮","非常放肆，毫无顾忌和畏惧。"],["刨根问底","比喻追究底细。"],["顺藤摸瓜","比喻按照某个线索查究事情。"],["披沙拣金","从大量数据中筛选有价值信息。"],["捕风捉影","比喻说话或做事时用似是而非的迹象做根据。"]]],
+["自我评价不当",[["妄自菲薄","毫无根据地小看自己。形容自轻自贱。"],["自惭形秽","因为自己模样丑陋而感到惭愧。也泛指自己觉得不如别人而感到惭愧。"],["自暴自弃","指自己糟蹋自己，自己看不起自己，甘心于落后。"],["自怨自艾","原指悔恨并且改正自己的错误，后多指悔恨。"],["怨天尤人","指遇到挫折、麻烦时一味抱怨命运和别人，而不寻找自身的原因。"],["夜郎自大","比喻妄自尊大。"]]],
+["近似成语",[["盛气凌人","指以骄横的气势欺负人。"],["弹冠相庆","指即将做官而互相庆贺，多用于贬义。"],["额手相庆","把手举到额头上互相庆贺。"],["优胜劣汰","指生物在生存竞争中适应力强的保存下来，适应力差的被淘汰。"],["弱肉强食","弱者的肉是强者的食物。比喻弱者被强者所欺凌、吞并等。"],["粉墨登场","化好妆登台演戏。也比喻登上政治舞台，含讥讽义。"],["百家争鸣","比喻各种学术派别竞相争辩鸣放。"],["百花齐放","各色的鲜花一齐开放。后多比喻文艺上不同的形式和风格自由地发展。"],["耸人听闻","指故意夸大或捏造事实，使人听后感到震惊。"],["骇人听闻","使人听了非常吃惊、害怕。"]]],
+["生僻成语",[["不刊之论","不可改动或不可磨灭的言论。"],["朝乾夕惕","形容一天到晚勤奋谨慎，没有一点疏忽懈怠。"],["曲高和寡","比喻思想、言行、文艺作品等高深，不能为多数人所理解接受。"],["阳春白雪","后泛指高雅、不通俗的文学艺术。"],["戎马倥偬","形容军务繁忙。"],["厉兵秣马","磨好兵器，喂好马。形容准备战斗。"],["不容置喙","喙：嘴。不容许插嘴。"],["不容置疑","不允许加以怀疑。指绝对真实可信。"],["移花接木","把枝条、嫩芽从一种花木嫁接到另一种花木上。比喻暗中更换。"],["偷梁换柱","比喻暗中耍手段改变事物内容，以假代真，以劣代优。"],["李代桃僵","比喻兄弟相爱相助，患难与共。也比喻以此代彼或代人受过。"],["张冠李戴","比喻弄错了事实或对象。"],["渊渟岳峙","比喻人品德如渊水深沉，如高山耸立。"],["不分畛域","畛域：范围，界限。不分界限、范围。也比喻不分彼此。"],["毛举细故","指烦琐地列举小事情，加以责难或攻击。"],["吉光片羽","比喻残存的珍贵文物。"],["钟灵毓秀","指山川秀美，人才辈出。"],["瑕瑜互见","比喻优点、缺点都有。"],["太阿倒持","倒拿着剑，把剑柄给别人。比喻把大权交给别人，自己反受其害。"]]]
 ];
 
-/* =========================================================
-   扁平化
-   ========================================================= */
+/* ========== 扁平化 ========== */
 const FLAT = [];
 const CAT_LIST = [];
-RAW.forEach(function(pair){
-  const cat = pair[0];
-  CAT_LIST.push(cat);
-  pair[1].forEach(function(it){
-    FLAT.push({ w: it[0], d: it[1], c: cat });
-  });
+RAW.forEach(function(p){
+  CAT_LIST.push(p[0]);
+  p[1].forEach(function(it){ FLAT.push({w:it[0],d:it[1],c:p[0]}); });
 });
 
-/* =========================================================
-   工具
-   ========================================================= */
-function shuffle(a){
-  for (let i = a.length - 1; i > 0; i--){
-    const j = Math.floor(Math.random() * (i + 1));
-    const t = a[i]; a[i] = a[j]; a[j] = t;
-  }
-  return a;
-}
-function $(id){ return document.getElementById(id); }
-function escapeHtml(s){
-  return String(s).replace(/[&<>"']/g, function(c){
-    return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c];
-  });
+/* ========== 工具 ========== */
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));const t=a[i];a[i]=a[j];a[j]=t}return a}
+function $(id){return document.getElementById(id)}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,function(c){return({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]})}
+
+/* ========== Toast ========== */
+let toastTimer=null;
+function showToast(msg){
+  const t=$('toast');t.textContent=msg;t.classList.add('show');
+  clearTimeout(toastTimer);toastTimer=setTimeout(function(){t.classList.remove('show')},1800);
 }
 
-/* =========================================================
-   触屏检测 & 移动端优化
-   ========================================================= */
-const IS_TOUCH = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
-
-(function preventDoubleTapZoom(){
-  let lastTouch = 0;
-  document.addEventListener('touchend', function(e){
-    const now = Date.now();
-    if (now - lastTouch <= 300) e.preventDefault();
-    lastTouch = now;
-  }, { passive: false });
+/* ========== 触屏 & PWA ========== */
+const IS_TOUCH=('ontouchstart' in window)||navigator.maxTouchPoints>0;
+(function(){
+  let last=0;
+  document.addEventListener('touchend',function(e){
+    const now=Date.now();
+    if(now-last<=300)e.preventDefault();
+    last=now;
+  },{passive:false});
 })();
-
 ['gesturestart','gesturechange','gestureend'].forEach(function(ev){
-  document.addEventListener(ev, function(e){ e.preventDefault(); }, { passive: false });
+  document.addEventListener(ev,function(e){e.preventDefault()},{passive:false});
 });
-
-(function injectManifest(){
-  const iconSvg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192">'
-    + '<rect width="192" height="192" rx="40" fill="#16a34a"/>'
-    + '<text x="96" y="130" font-size="100" text-anchor="middle" fill="#ffffff" '
-    + 'font-family="PingFang SC,Microsoft YaHei,sans-serif">词</text></svg>';
-  const manifest = {
-    name:'高频成语800词', short_name:'成语800',
-    description:'高频成语800词 · 看意思选词语 / 看词语选意思 交互记忆系统',
-    start_url:'.', scope:'.', display:'standalone', orientation:'portrait',
-    background_color:'#f0fdf4', theme_color:'#16a34a',
-    icons:[{ src:'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(iconSvg),
-      sizes:'192x192', type:'image/svg+xml', purpose:'any' }]
-  };
-  try {
-    const link = document.createElement('link');
-    link.rel = 'manifest';
-    link.href = 'data:application/manifest+json;charset=utf-8,' + encodeURIComponent(JSON.stringify(manifest));
-    document.head.appendChild(link);
-    const appleIcon = document.createElement('link');
-    appleIcon.rel = 'apple-touch-icon';
-    appleIcon.href = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(iconSvg);
-    document.head.appendChild(appleIcon);
-  } catch (err) {}
+(function(){
+  const svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192"><rect width="192" height="192" rx="40" fill="#16a34a"/><text x="96" y="130" font-size="100" text-anchor="middle" fill="#fff" font-family="PingFang SC,Microsoft YaHei,sans-serif">词</text></svg>';
+  const manifest={name:'高频成语800词',short_name:'成语800',description:'高频成语800词 · 交互记忆系统',start_url:'.',scope:'.',display:'standalone',orientation:'portrait',background_color:'#f0fdf4',theme_color:'#16a34a',icons:[{src:'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg),sizes:'192x192',type:'image/svg+xml',purpose:'any'}]};
+  try{
+    const l=document.createElement('link');l.rel='manifest';l.href='data:application/manifest+json;charset=utf-8,'+encodeURIComponent(JSON.stringify(manifest));document.head.appendChild(l);
+    const a=document.createElement('link');a.rel='apple-touch-icon';a.href='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);document.head.appendChild(a);
+  }catch(e){}
 })();
 
-/* =========================================================
-   状态
-   ========================================================= */
-const state = {
-  mode: 'd2w',
-  count: 20,
-  cats: new Set(),
-  queue: [],
-  idx: 0,
-  correct: 0,
-  wrong: [],          // 简版错题列表（结果页摘要用）
-  wrongDetails: [],   // 完整错题详情（错题本用）
-  answered: false,
-  finished: false
+/* ========== 状态 ========== */
+const state={
+  mode:'d2w',count:20,cats:new Set(),
+  queue:[],idx:0,correct:0,
+  wrong:[],wrongDetails:[],
+  answered:false,finished:false
 };
 
-/* =========================================================
-   首页交互
-   ========================================================= */
-document.querySelectorAll('.mode-btn').forEach(function(btn){
-  btn.addEventListener('click', function(){
-    document.querySelectorAll('.mode-btn').forEach(function(b){ b.classList.remove('active'); });
-    btn.classList.add('active');
-    state.mode = btn.dataset.mode;
+/* ========== 首页交互 ========== */
+document.querySelectorAll('.mode-btn').forEach(function(b){
+  b.addEventListener('click',function(){
+    document.querySelectorAll('.mode-btn').forEach(function(x){x.classList.remove('active')});
+    b.classList.add('active');state.mode=b.dataset.mode;
   });
 });
-
-document.querySelectorAll('.count-chip').forEach(function(btn){
-  btn.addEventListener('click', function(){
-    document.querySelectorAll('.count-chip').forEach(function(b){ b.classList.remove('on'); });
-    btn.classList.add('on');
-    state.count = parseInt(btn.dataset.n, 10);
+document.querySelectorAll('.count-chip').forEach(function(b){
+  b.addEventListener('click',function(){
+    document.querySelectorAll('.count-chip').forEach(function(x){x.classList.remove('on')});
+    b.classList.add('on');state.count=parseInt(b.dataset.n,10);
   });
 });
-
-(function buildChips(){
-  const box = $('catChips');
-  const allBtn = document.createElement('button');
-  allBtn.type = 'button';
-  allBtn.className = 'chip all on';
-  allBtn.textContent = '全部';
-  allBtn.addEventListener('click', function(){
-    state.cats.clear();
-    updateChips();
-  });
-  box.appendChild(allBtn);
-
+(function(){
+  const box=$('catChips');
+  const all=document.createElement('button');
+  all.type='button';all.className='chip all on';all.textContent='全部';
+  all.addEventListener('click',function(){state.cats.clear();updateChips()});
+  box.appendChild(all);
   CAT_LIST.forEach(function(c){
-    const b = document.createElement('button');
-    b.type = 'button';
-    b.className = 'chip';
-    b.textContent = c;
-    b.dataset.cat = c;
-    b.addEventListener('click', function(){
-      if (state.cats.has(c)) state.cats.delete(c);
-      else state.cats.add(c);
+    const b=document.createElement('button');
+    b.type='button';b.className='chip';b.textContent=c;b.dataset.cat=c;
+    b.addEventListener('click',function(){
+      if(state.cats.has(c))state.cats.delete(c);else state.cats.add(c);
       updateChips();
     });
     box.appendChild(b);
   });
 })();
-
 function updateChips(){
-  const box = $('catChips');
+  const box=$('catChips');
   box.querySelectorAll('.chip').forEach(function(el){
-    if (el.classList.contains('all')){
-      el.classList.toggle('on', state.cats.size === 0);
-    } else {
-      el.classList.toggle('on', state.cats.has(el.dataset.cat));
-    }
+    if(el.classList.contains('all'))el.classList.toggle('on',state.cats.size===0);
+    else el.classList.toggle('on',state.cats.has(el.dataset.cat));
   });
-  const pool = state.cats.size
-    ? FLAT.filter(function(x){ return state.cats.has(x.c); })
-    : FLAT;
-  $('poolInfo').textContent = '当前范围：'
-    + (state.cats.size ? state.cats.size + ' 个分类' : '全部 ' + CAT_LIST.length + ' 个分类')
-    + ' · 共 ' + pool.length + ' 条词条';
+  const pool=state.cats.size?FLAT.filter(function(x){return state.cats.has(x.c)}):FLAT;
+  $('poolInfo').textContent='当前范围：'+(state.cats.size?state.cats.size+' 个分类':'全部 '+CAT_LIST.length+' 个分类')+' · 共 '+pool.length+' 条词条';
 }
 updateChips();
 
-/* =========================================================
-   出题
-   ========================================================= */
-function makeQuestion(item, mode){
-  const key = (mode === 'd2w') ? 'w' : 'd';
-  const correctText = item[key];
-  const seen = new Set([correctText]);
-  const picked = [];
-
-  const sameCat = shuffle(FLAT.filter(function(x){ return x.c === item.c && x !== item; }));
-  const otherCat = shuffle(FLAT.filter(function(x){ return x.c !== item.c; }));
-
-  for (let i = 0; i < sameCat.length && picked.length < 3; i++){
-    const x = sameCat[i];
-    if (seen.has(x[key])) continue;
-    seen.add(x[key]); picked.push(x);
-  }
-  for (let i = 0; i < otherCat.length && picked.length < 3; i++){
-    const x = otherCat[i];
-    if (seen.has(x[key])) continue;
-    seen.add(x[key]); picked.push(x);
-  }
-
-  const opts = shuffle(
-    [{ text: correctText, ok: true }].concat(
-      picked.map(function(x){ return { text: x[key], ok: false }; })
-    )
-  );
-  return { item: item, mode: mode, key: key, opts: opts };
+/* ========== 出题 ========== */
+function makeQuestion(item,mode){
+  const key=mode==='d2w'?'w':'d';
+  const correct=item[key];
+  const seen=new Set([correct]);
+  const picked=[];
+  const same=shuffle(FLAT.filter(function(x){return x.c===item.c&&x!==item}));
+  const other=shuffle(FLAT.filter(function(x){return x.c!==item.c}));
+  for(let i=0;i<same.length&&picked.length<3;i++){if(seen.has(same[i][key]))continue;seen.add(same[i][key]);picked.push(same[i])}
+  for(let i=0;i<other.length&&picked.length<3;i++){if(seen.has(other[i][key]))continue;seen.add(other[i][key]);picked.push(other[i])}
+  const opts=shuffle([{text:correct,ok:true}].concat(picked.map(function(x){return{text:x[key],ok:false}})));
+  return{item:item,mode:mode,key:key,opts:opts};
 }
-
-function pickMode(){
-  if (state.mode === 'mix') return Math.random() < 0.5 ? 'd2w' : 'w2d';
-  return state.mode;
-}
-
-function buildQueue(pool, n){
-  const out = [];
-  let guard = 0;
-  while (out.length < n && guard < 200){
-    guard++;
-    const batch = shuffle(pool.slice());
-    for (let i = 0; i < batch.length && out.length < n; i++) out.push(batch[i]);
-  }
+function pickMode(){if(state.mode==='mix')return Math.random()<0.5?'d2w':'w2d';return state.mode}
+function buildQueue(pool,n){
+  const out=[];let g=0;
+  while(out.length<n&&g<200){g++;const b=shuffle(pool.slice());for(let i=0;i<b.length&&out.length<n;i++)out.push(b[i])}
   return out;
 }
 
-/* =========================================================
-   开始练习
-   ========================================================= */
+/* ========== 开始练习 ========== */
 function startQuiz(){
-  const pool = state.cats.size
-    ? FLAT.filter(function(x){ return state.cats.has(x.c); })
-    : FLAT.slice();
-
-  if (!pool.length){ alert('当前范围内没有词条，请重新选择。'); return; }
-
-  let n = Math.min(state.count, pool.length);
-  if (n < 1) n = 1;
-
-  const items = buildQueue(pool, n);
-  state.queue = items.map(function(it){ return makeQuestion(it, pickMode()); });
-  state.idx = 0;
-  state.correct = 0;
-  state.wrong = [];
-  state.wrongDetails = [];
-  state.answered = false;
-  state.finished = false;
-
+  const pool=state.cats.size?FLAT.filter(function(x){return state.cats.has(x.c)}):FLAT.slice();
+  if(!pool.length){alert('当前范围内没有词条，请重新选择。');return}
+  let n=Math.min(state.count,pool.length);if(n<1)n=1;
+  const items=buildQueue(pool,n);
+  state.queue=items.map(function(it){return makeQuestion(it,pickMode())});
+  state.idx=0;state.correct=0;state.wrong=[];state.wrongDetails=[];
+  state.answered=false;state.finished=false;
   showScreen('screen-quiz');
   renderQuestion();
 }
-
 function renderQuestion(){
-  const q = state.queue[state.idx];
-  if (!q){ finishQuiz(); return; }
-
-  state.answered = false;
-  const isD2W = q.mode === 'd2w';
-
-  $('qIdx').textContent = (state.idx + 1) + ' / ' + state.queue.length;
-  $('okCount').textContent = state.correct;
-  $('noCount').textContent = state.wrong.length;
-  $('progressFill').style.width = (state.idx / state.queue.length * 100) + '%';
-
-  $('qTag').textContent = isD2W ? '请选择与该意思相符的词语' : '请选择该词语的正确释义';
-  const qText = $('qText');
-  qText.textContent = isD2W ? q.item.d : q.item.w;
-  qText.className = 'q-text' + (isD2W ? '' : ' meaning');
-
-  const box = $('options');
-  box.innerHTML = '';
-  const letters = ['A', 'B', 'C', 'D', 'E'];
-  q.opts.forEach(function(opt, i){
-    const btn = document.createElement('button');
-    btn.type = 'button';
-    btn.className = 'opt';
-    btn.dataset.i = i;
-    btn.innerHTML = '<span class="opt-key">' + letters[i] + '</span>'
-      + '<span class="opt-text' + (isD2W ? '' : ' small') + '"></span>';
-    btn.querySelector('.opt-text').textContent = opt.text;
-    btn.addEventListener('click', function(){ chooseOption(i); });
-    box.appendChild(btn);
+  const q=state.queue[state.idx];
+  if(!q){finishQuiz();return}
+  state.answered=false;
+  const isD2W=q.mode==='d2w';
+  $('qIdx').textContent=(state.idx+1)+' / '+state.queue.length;
+  $('okCount').textContent=state.correct;
+  $('noCount').textContent=state.wrong.length;
+  $('progressFill').style.width=(state.idx/state.queue.length*100)+'%';
+  $('qTag').textContent=isD2W?'请选择与该意思相符的词语':'请选择该词语的正确释义';
+  const qText=$('qText');
+  qText.textContent=isD2W?q.item.d:q.item.w;
+  qText.className='q-text'+(isD2W?'':' meaning');
+  const box=$('options');box.innerHTML='';
+  const letters=['A','B','C','D','E'];
+  q.opts.forEach(function(opt,i){
+    const b=document.createElement('button');
+    b.type='button';b.className='opt';b.dataset.i=i;
+    b.innerHTML='<span class="opt-key">'+letters[i]+'</span><span class="opt-text'+(isD2W?'':' small')+'"></span>';
+    b.querySelector('.opt-text').textContent=opt.text;
+    b.addEventListener('click',function(){chooseOption(i)});
+    box.appendChild(b);
   });
-
-  $('feedback').className = 'feedback';
-  $('feedback').innerHTML = '';
+  $('feedback').className='feedback';$('feedback').innerHTML='';
   $('nextBtn').classList.add('hidden');
-  $('nextBtn').textContent = (state.idx === state.queue.length - 1) ? '查看结果 →' : '下一题 →';
-
-  if (IS_TOUCH) window.scrollTo({ top: 0, behavior: 'smooth' });
+  $('nextBtn').textContent=(state.idx===state.queue.length-1)?'查看结果 →':'下一题 →';
+  if(IS_TOUCH)window.scrollTo({top:0,behavior:'smooth'});
 }
-
-/* =========================================================
-   答题判定（★核心：记录错题详情）
-   ========================================================= */
 function chooseOption(i){
-  if (state.answered) return;
-  state.answered = true;
-
-  const q = state.queue[state.idx];
-  const nodes = document.querySelectorAll('.opt');
-
-  nodes.forEach(function(el, j){
-    el.classList.add('locked');
-    if (q.opts[j].ok) el.classList.add('correct');
-  });
-
-  const ok = q.opts[i].ok;
-  if (ok){
-    state.correct++;
-  } else {
+  if(state.answered)return;
+  state.answered=true;
+  const q=state.queue[state.idx];
+  const nodes=document.querySelectorAll('.opt');
+  nodes.forEach(function(el,j){el.classList.add('locked');if(q.opts[j].ok)el.classList.add('correct')});
+  const ok=q.opts[i].ok;
+  if(ok){state.correct++}
+  else{
     nodes[i].classList.add('wrong');
-    if (state.wrong.indexOf(q.item) === -1) state.wrong.push(q.item);
-
-    // ★ 记录完整错题信息
-    const correctOpt = q.opts.find(function(o){ return o.ok; });
+    if(state.wrong.indexOf(q.item)===-1)state.wrong.push(q.item);
+    const co=q.opts.find(function(o){return o.ok});
     state.wrongDetails.push({
-      item: q.item,
-      mode: q.mode,
-      question: q.mode === 'd2w' ? q.item.d : q.item.w,
-      userAnswer: q.opts[i].text,
-      correctAnswer: correctOpt ? correctOpt.text : ''
+      item:q.item,mode:q.mode,
+      question:q.mode==='d2w'?q.item.d:q.item.w,
+      userAnswer:q.opts[i].text,
+      correctAnswer:co?co.text:''
     });
   }
-
-  const fb = $('feedback');
-  fb.className = 'feedback show ' + (ok ? 'ok' : 'no');
-  fb.innerHTML = '<div class="fb-title">' + (ok ? '✅ 回答正确' : '❌ 回答错误')
-    + '</div><div class="fb-body"><b>' + escapeHtml(q.item.w) + '</b>　'
-    + escapeHtml(q.item.d) + '</div>';
-
-  $('okCount').textContent = state.correct;
-  $('noCount').textContent = state.wrong.length;
-  $('progressFill').style.width = ((state.idx + 1) / state.queue.length * 100) + '%';
+  const fb=$('feedback');
+  fb.className='feedback show '+(ok?'ok':'no');
+  fb.innerHTML='<div class="fb-title">'+(ok?'✅ 回答正确':'❌ 回答错误')+'</div><div class="fb-body"><b>'+escapeHtml(q.item.w)+'</b>　'+escapeHtml(q.item.d)+'</div>';
+  $('okCount').textContent=state.correct;
+  $('noCount').textContent=state.wrong.length;
+  $('progressFill').style.width=((state.idx+1)/state.queue.length*100)+'%';
   $('nextBtn').classList.remove('hidden');
-
-  if (IS_TOUCH){
-    setTimeout(function(){
-      $('nextBtn').scrollIntoView({ behavior:'smooth', block:'center' });
-    }, 120);
-  }
+  if(IS_TOUCH)setTimeout(function(){$('nextBtn').scrollIntoView({behavior:'smooth',block:'center'})},120);
 }
-
 function nextQuestion(){
   state.idx++;
-  if (state.idx >= state.queue.length){
-    finishQuiz();
-  } else {
-    renderQuestion();
-  }
+  if(state.idx>=state.queue.length)finishQuiz();
+  else renderQuestion();
 }
 
-/* =========================================================
-   结束 & 结果
-   ========================================================= */
+/* ========== 结果 ========== */
 function finishQuiz(){
-  state.finished = true;
-  const total = state.queue.length;
-  const rate = total ? Math.round(state.correct / total * 100) : 0;
-
-  $('scoreBig').textContent = rate + '%';
-  $('scoreSub').textContent = '答对 ' + state.correct + ' / ' + total + ' 题';
-
-  let msg = '';
-  if (rate >= 95) msg = '🏆 炉火纯青！这批词你已烂熟于心。';
-  else if (rate >= 85) msg = '🎉 出类拔萃！再打磨细节就更稳了。';
-  else if (rate >= 70) msg = '👍 渐入佳境，继续保持这个节奏。';
-  else if (rate >= 55) msg = '💪 小有基础，错题回顾一下会更牢固。';
-  else msg = '📚 别急，厚积薄发，先把错题啃透。';
-  $('resultMsg').textContent = msg;
-
-  const list = $('wrongList');
-  if (state.wrong.length === 0){
-    $('wrongTitle').textContent = '全部答对，无错题 🎊';
-    list.innerHTML = '<div class="empty">太棒了，这一轮没有错题！</div>';
-  } else {
-    $('wrongTitle').textContent = '错题回顾（' + state.wrong.length + ' 个）';
-    list.innerHTML = state.wrong.map(function(it){
-      return '<div class="wrong-item"><b>' + escapeHtml(it.w) + '</b>　'
-        + '<span class="wrong-cat">' + escapeHtml(it.c) + '</span><br>'
-        + '<span>' + escapeHtml(it.d) + '</span></div>';
+  state.finished=true;
+  const total=state.queue.length;
+  const rate=total?Math.round(state.correct/total*100):0;
+  $('scoreBig').textContent=rate+'%';
+  $('scoreSub').textContent='答对 '+state.correct+' / '+total+' 题';
+  let msg='';
+  if(rate>=95)msg='🏆 炉火纯青！这批词你已烂熟于心。';
+  else if(rate>=85)msg='🎉 出类拔萃！再打磨细节就更稳了。';
+  else if(rate>=70)msg='👍 渐入佳境，继续保持这个节奏。';
+  else if(rate>=55)msg='💪 小有基础，错题回顾一下会更牢固。';
+  else msg='📚 别急，厚积薄发，先把错题啃透。';
+  $('resultMsg').textContent=msg;
+  const list=$('wrongList');
+  if(state.wrong.length===0){
+    $('wrongTitle').textContent='全部答对，无错题 🎊';
+    list.innerHTML='<div class="empty">太棒了，这一轮没有错题！</div>';
+  }else{
+    $('wrongTitle').textContent='错题回顾（'+state.wrong.length+' 个）';
+    list.innerHTML=state.wrong.map(function(it){
+      return '<div class="wrong-item"><b>'+escapeHtml(it.w)+'</b>　<span class="wrong-cat">'+escapeHtml(it.c)+'</span><br><span>'+escapeHtml(it.d)+'</span></div>';
     }).join('');
   }
-
   showScreen('screen-result');
 }
 
-/* =========================================================
-   ★ 错题本渲染
-   ========================================================= */
+/* ========== 错题本渲染 ========== */
 function renderWrongReview(){
-  const list = $('wrongDetailList');
-  $('wrongDetailCount').textContent = state.wrongDetails.length;
-
-  if (!state.wrongDetails.length){
-    list.innerHTML = '<div class="empty">本轮全部答对，错题本是空的 🎉</div>';
-    return;
-  }
-
-  list.innerHTML = state.wrongDetails.map(function(w, i){
-    const isD2W = w.mode === 'd2w';
+  const list=$('wrongDetailList');
+  $('wrongDetailCount').textContent=state.wrongDetails.length;
+  if(!state.wrongDetails.length){list.innerHTML='<div class="empty">本轮全部答对，错题本是空的 🎉</div>';return}
+  list.innerHTML=state.wrongDetails.map(function(w,i){
+    const isD2W=w.mode==='d2w';
     return '<div class="wrong-detail-item">'
-      + '<div class="wrong-detail-head">'
-      + '<span class="wrong-detail-index">' + (i + 1) + '</span>'
-      + '<span class="wrong-detail-word">' + escapeHtml(w.item.w) + '</span>'
-      + '<span class="wrong-detail-cat">' + escapeHtml(w.item.c) + '</span>'
-      + '<span class="wrong-detail-tag">' + (isD2W ? '看意思选词' : '看词选意思') + '</span>'
-      + '</div>'
-      + '<div class="wrong-detail-question"><em>题目</em>' + escapeHtml(w.question) + '</div>'
-      + '<div class="wrong-detail-def"><em>释义</em>' + escapeHtml(w.item.d) + '</div>'
-      + '<div class="wrong-detail-row user"><b>你的答案：</b>' + escapeHtml(w.userAnswer) + '</div>'
-      + '<div class="wrong-detail-row correct"><b>正确答案：</b>' + escapeHtml(w.correctAnswer) + '</div>'
-      + '</div>';
+      +'<div class="wrong-detail-head"><span class="wrong-detail-index">'+(i+1)+'</span><span class="wrong-detail-word">'+escapeHtml(w.item.w)+'</span><span class="wrong-detail-cat">'+escapeHtml(w.item.c)+'</span><span class="wrong-detail-tag">'+(isD2W?'看意思选词':'看词选意思')+'</span></div>'
+      +'<div class="wrong-detail-question"><em>题目</em>'+escapeHtml(w.question)+'</div>'
+      +'<div class="wrong-detail-def"><em>释义</em>'+escapeHtml(w.item.d)+'</div>'
+      +'<div class="wrong-detail-row user"><b>你的答案：</b>'+escapeHtml(w.userAnswer)+'</div>'
+      +'<div class="wrong-detail-row correct"><b>正确答案：</b>'+escapeHtml(w.correctAnswer)+'</div>'
+      +'</div>';
   }).join('');
 }
 
-/* =========================================================
-   屏幕切换
-   ========================================================= */
-function showScreen(id){
-  document.querySelectorAll('.screen').forEach(function(s){ s.classList.remove('active'); });
-  $(id).classList.add('active');
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+/* ========== 复制文本 ========== */
+function copyWrongText(){
+  if(!state.wrongDetails.length){showToast('本轮没有错题');return}
+  const lines=['高频成语800词 · 错题本','共 '+state.wrongDetails.length+' 道错题','—————————————',''];
+  state.wrongDetails.forEach(function(w,i){
+    lines.push('【'+(i+1)+'】'+w.item.w+'（'+w.item.c+'）');
+    lines.push('题型：'+(w.mode==='d2w'?'看意思选词':'看词选意思'));
+    lines.push('题目：'+w.question);
+    lines.push('释义：'+w.item.d);
+    lines.push('你的答案：'+w.userAnswer);
+    lines.push('正确答案：'+w.correctAnswer);
+    lines.push('');
+  });
+  const text=lines.join('\n');
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(function(){showToast('✅ 已复制到剪贴板')}).catch(function(){fallbackCopy(text)});
+  }else fallbackCopy(text);
+}
+function fallbackCopy(text){
+  try{
+    const ta=document.createElement('textarea');
+    ta.value=text;ta.style.position='fixed';ta.style.left='-9999px';
+    document.body.appendChild(ta);ta.focus();ta.select();
+    ta.setSelectionRange(0,ta.value.length);
+    const ok=document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast(ok?'✅ 已复制到剪贴板':'❌ 复制失败');
+  }catch(e){showToast('❌ 复制失败')}
 }
 
-/* =========================================================
-   浏览词条
-   ========================================================= */
-function renderBrowse(keyword){
-  const kw = (keyword || '').trim().toLowerCase();
-  const list = kw
-    ? FLAT.filter(function(x){
-        return x.w.toLowerCase().indexOf(kw) !== -1
-          || x.d.toLowerCase().indexOf(kw) !== -1
-          || x.c.toLowerCase().indexOf(kw) !== -1;
-      })
-    : FLAT;
-
-  $('browseCount').textContent = '共 ' + list.length + ' 条'
-    + (kw ? '（关键词：' + keyword + '）' : '');
-
-  if (!list.length){
-    $('browseList').innerHTML = '<div class="empty">没有找到匹配的词条</div>';
-    return;
+/* ========== 生成图片 ========== */
+function wrapText(ctx,text,maxWidth){
+  if(!text)return[''];
+  const lines=[];let line='';
+  for(let i=0;i<text.length;i++){
+    const ch=text[i];
+    if(ch==='\n'){lines.push(line);line='';continue}
+    const test=line+ch;
+    if(ctx.measureText(test).width>maxWidth&&line){lines.push(line);line=ch}
+    else line=test;
   }
+  if(line)lines.push(line);
+  return lines;
+}
+function roundRect(ctx,x,y,w,h,r){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.quadraticCurveTo(x+w,y,x+w,y+r);
+  ctx.lineTo(x+w,y+h-r);ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+  ctx.lineTo(x+r,y+h);ctx.quadraticCurveTo(x,y+h,x,y+h-r);
+  ctx.lineTo(x,y+r);ctx.quadraticCurveTo(x,y,x+r,y);
+  ctx.closePath();
+}
+function drawBlock(ctx,x,y,w,label,lines,bg,accent,textColor,FS){
+  const PADX=16,PADY=12,LABEL_H=24,LH=36;
+  const totalH=PADY+LABEL_H+6+lines.length*LH+PADY;
+  roundRect(ctx,x,y,w,totalH,10);
+  ctx.fillStyle=bg;ctx.fill();
+  ctx.fillStyle=accent;ctx.fillRect(x,y+8,4,totalH-16);
+  ctx.font=FS.label;ctx.fillStyle=accent;ctx.textBaseline='top';
+  ctx.fillText(label,x+PADX,y+PADY);
+  ctx.font=FS.body;ctx.fillStyle=textColor;
+  let ly=y+PADY+LABEL_H+6;
+  lines.forEach(function(line){ctx.fillText(line,x+PADX,ly);ly+=LH});
+  return y+totalH;
+}
+function buildWrongImage(){
+  const W=750,PAD=40,CW=W-PAD*2;
+  const canvas=document.createElement('canvas');
+  const ctx=canvas.getContext('2d');
+  const FS={
+    h1:'bold 38px "PingFang SC","Microsoft YaHei",sans-serif',
+    h2:'22px "PingFang SC","Microsoft YaHei",sans-serif',
+    word:'bold 30px "PingFang SC","Microsoft YaHei",sans-serif',
+    index:'bold 20px "PingFang SC","Microsoft YaHei",sans-serif',
+    badge:'bold 18px "PingFang SC","Microsoft YaHei",sans-serif',
+    label:'bold 20px "PingFang SC","Microsoft YaHei",sans-serif',
+    body:'24px "PingFang SC","Microsoft YaHei",sans-serif',
+    foot:'20px "PingFang SC","Microsoft YaHei",sans-serif'
+  };
+  const LH=36;
+  ctx.font=FS.body;
+  const items=state.wrongDetails.map(function(w){
+    return{data:w,
+      qLines:wrapText(ctx,w.question,CW-80),
+      dLines:wrapText(ctx,w.item.d,CW-80),
+      uLines:wrapText(ctx,w.userAnswer,CW-80),
+      cLines:wrapText(ctx,w.correctAnswer,CW-80)};
+  });
+  const HEADER=140,CARD_PAD=24,GAP=20;
+  const cardH=items.map(function(it){
+    let h=CARD_PAD*2+50+14;
+    h+=24+12+it.qLines.length*LH+12+12;
+    h+=24+12+it.dLines.length*LH+12+12;
+    h+=24+12+it.uLines.length*LH+12+10;
+    h+=24+12+it.cLines.length*LH+12;
+    return h;
+  });
+  let totalH=HEADER+PAD;
+  cardH.forEach(function(h){totalH+=h+GAP});
+  totalH+=90;
+  canvas.width=W;canvas.height=totalH;
+  ctx.textBaseline='top';
+  ctx.fillStyle='#f0fdf4';ctx.fillRect(0,0,W,totalH);
+  const grad=ctx.createLinearGradient(0,0,W,HEADER);
+  grad.addColorStop(0,'#14532d');grad.addColorStop(.5,'#16a34a');grad.addColorStop(1,'#4ade80');
+  ctx.fillStyle=grad;ctx.fillRect(0,0,W,HEADER);
+  ctx.fillStyle='#fff';ctx.font=FS.h1;
+  ctx.fillText('高频成语800词 · 错题本',PAD,42);
+  const now=new Date();
+  const ds=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0')+' '+String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
+  ctx.font=FS.h2;ctx.fillStyle='rgba(255,255,255,0.9)';
+  ctx.fillText(ds+'  ·  共 '+items.length+' 道错题',PAD,96);
+  let y=HEADER+PAD;
+  items.forEach(function(it,i){
+    const h=cardH[i];const cx=PAD+24;const innerW=CW-48;
+    roundRect(ctx,PAD,y,CW,h,18);
+    ctx.fillStyle='#fff';ctx.fill();
+    ctx.strokeStyle='#e5e7eb';ctx.lineWidth=2;ctx.stroke();
+    let cy=y+CARD_PAD;
+    ctx.fillStyle='#dc2626';
+    ctx.beginPath();ctx.arc(cx+16,cy+22,16,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#fff';ctx.font=FS.index;
+    ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText(String(i+1),cx+16,cy+23);
+    ctx.textAlign='left';ctx.textBaseline='top';
+    ctx.fillStyle='#166534';ctx.font=FS.word;
+    ctx.fillText(it.data.item.w,cx+44,cy+4);
+    ctx.font=FS.badge;
+    const tag=it.data.mode==='d2w'?'看意思选词':'看词选意思';
+    const tagW=ctx.measureText(tag).width+24;
+    const tagX=cx+innerW-tagW;
+    roundRect(ctx,tagX,cy+8,tagW,30,15);
+    ctx.fillStyle='#fef3c7';ctx.fill();
+    ctx.fillStyle='#92400e';ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText(tag,tagX+tagW/2,cy+24);
+    ctx.textAlign='left';ctx.textBaseline='top';
+    cy+=50+14;
+    cy=drawBlock(ctx,cx,cy,innerW,'题目',it.qLines,'#eff6ff','#3b82f6','#1e3a8a',FS)+12;
+    cy=drawBlock(ctx,cx,cy,innerW,'释义',it.dLines,'#ffffff','#9ca3af','#374151',FS)+12;
+    cy=drawBlock(ctx,cx,cy,innerW,'你的答案',it.uLines,'#fef2f2','#dc2626','#991b1b',FS)+10;
+    cy=drawBlock(ctx,cx,cy,innerW,'正确答案',it.cLines,'#f0fdf4','#16a34a','#166534',FS);
+    y+=h+GAP;
+  });
+  ctx.font=FS.foot;ctx.fillStyle='#6b7280';ctx.textAlign='center';
+  ctx.fillText('—— 高频成语800词 · 交互记忆系统 ——',W/2,y+20);
+  ctx.textAlign='left';
+  return canvas;
+}
+function showWrongImage(){
+  if(!state.wrongDetails.length){showToast('本轮没有错题');return}
+  showToast('正在生成图片…');
+  setTimeout(function(){
+    try{
+      const canvas=buildWrongImage();
+      const dataUrl=canvas.toDataURL('image/png');
+      $('previewImg').src=dataUrl;
+      $('previewImg').dataset.url=dataUrl;
+      $('imageModal').classList.add('show');
+    }catch(e){showToast('❌ 生成失败：'+e.message)}
+  },50);
+}
+function downloadImage(){
+  const url=$('previewImg').dataset.url;
+  if(!url)return;
+  const a=document.createElement('a');
+  const now=new Date();
+  const stamp=now.getFullYear()+String(now.getMonth()+1).padStart(2,'0')+String(now.getDate()).padStart(2,'0')+'_'+String(now.getHours()).padStart(2,'0')+String(now.getMinutes()).padStart(2,'0');
+  a.href=url;a.download='错题本_'+stamp+'.png';
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+  showToast('✅ 图片已开始下载');
+}
 
-  $('browseList').innerHTML = list.map(function(x){
-    return '<div class="b-item">'
-      + '<div class="b-head"><span class="b-word">' + escapeHtml(x.w) + '</span>'
-      + '<span class="b-cat">' + escapeHtml(x.c) + '</span></div>'
-      + '<div class="b-def">' + escapeHtml(x.d) + '</div>'
-      + '</div>';
+/* ========== 屏幕切换 ========== */
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active')});
+  $(id).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ========== 浏览 ========== */
+function renderBrowse(keyword){
+  const kw=(keyword||'').trim().toLowerCase();
+  const list=kw?FLAT.filter(function(x){
+    return x.w.toLowerCase().indexOf(kw)!==-1||x.d.toLowerCase().indexOf(kw)!==-1||x.c.toLowerCase().indexOf(kw)!==-1;
+  }):FLAT;
+  $('browseCount').textContent='共 '+list.length+' 条'+(kw?'（关键词：'+keyword+'）':'');
+  if(!list.length){$('browseList').innerHTML='<div class="empty">没有找到匹配的词条</div>';return}
+  $('browseList').innerHTML=list.map(function(x){
+    return '<div class="b-item"><div class="b-head"><span class="b-word">'+escapeHtml(x.w)+'</span><span class="b-cat">'+escapeHtml(x.c)+'</span></div><div class="b-def">'+escapeHtml(x.d)+'</div></div>';
   }).join('');
 }
 
-/* =========================================================
-   事件绑定
-   ========================================================= */
-$('startBtn').addEventListener('click', startQuiz);
-$('nextBtn').addEventListener('click', nextQuestion);
-
-$('quitBtn').addEventListener('click', function(){
-  if (state.idx > 0 && state.idx < state.queue.length && !state.finished){
-    if (!confirm('确定退出本轮练习吗？当前进度将不会保存。')) return;
+/* ========== 事件绑定 ========== */
+$('startBtn').addEventListener('click',startQuiz);
+$('nextBtn').addEventListener('click',nextQuestion);
+$('quitBtn').addEventListener('click',function(){
+  if(state.idx>0&&state.idx<state.queue.length&&!state.finished){
+    if(!confirm('确定退出本轮练习吗？当前进度将不会保存。'))return;
   }
   showScreen('screen-home');
 });
-
-$('againBtn').addEventListener('click', startQuiz);
-$('homeBtn').addEventListener('click', function(){ showScreen('screen-home'); });
-
-// ★ 查看全部错题
-$('viewWrongBtn').addEventListener('click', function(){
-  renderWrongReview();
-  showScreen('screen-wrong');
-});
-$('backFromWrongBtn').addEventListener('click', function(){
-  showScreen('screen-result');
-});
-
-$('browseBtn').addEventListener('click', function(){
-  $('searchInput').value = '';
-  renderBrowse('');
-  showScreen('screen-browse');
-});
-$('backHomeBtn').addEventListener('click', function(){ showScreen('screen-home'); });
-$('searchInput').addEventListener('input', function(e){ renderBrowse(e.target.value); });
-
-window.addEventListener('beforeunload', function(e){
-  if ($('screen-quiz').classList.contains('active')
-      && !state.finished
-      && state.idx < state.queue.length){
-    e.preventDefault();
-    e.returnValue = '';
-    return '';
+$('againBtn').addEventListener('click',startQuiz);
+$('homeBtn').addEventListener('click',function(){showScreen('screen-home')});
+$('viewWrongBtn').addEventListener('click',function(){renderWrongReview();showScreen('screen-wrong')});
+$('backFromWrongBtn').addEventListener('click',function(){showScreen('screen-result')});
+$('copyTextBtn').addEventListener('click',copyWrongText);
+$('copyTextBtn2').addEventListener('click',copyWrongText);
+$('saveImgBtn').addEventListener('click',showWrongImage);
+$('downloadImgBtn').addEventListener('click',downloadImage);
+$('closeModalBtn').addEventListener('click',function(){$('imageModal').classList.remove('show')});
+$('imageModal').addEventListener('click',function(e){if(e.target===$('imageModal'))$('imageModal').classList.remove('show')});
+$('browseBtn').addEventListener('click',function(){$('searchInput').value='';renderBrowse('');showScreen('screen-browse')});
+$('backHomeBtn').addEventListener('click',function(){showScreen('screen-home')});
+$('searchInput').addEventListener('input',function(e){renderBrowse(e.target.value)});
+window.addEventListener('beforeunload',function(e){
+  if($('screen-quiz').classList.contains('active')&&!state.finished&&state.idx<state.queue.length){
+    e.preventDefault();e.returnValue='';return'';
   }
 });
-
-if (!IS_TOUCH){
-  document.addEventListener('keydown', function(e){
-    if (!$('screen-quiz').classList.contains('active')) return;
-
-    if (e.key === 'Enter' || e.key === ' '){
-      if (state.answered && !$('nextBtn').classList.contains('hidden')){
-        e.preventDefault();
-        nextQuestion();
-      }
+if(!IS_TOUCH){
+  document.addEventListener('keydown',function(e){
+    if(!$('screen-quiz').classList.contains('active'))return;
+    if(e.key==='Enter'||e.key===' '){
+      if(state.answered&&!$('nextBtn').classList.contains('hidden')){e.preventDefault();nextQuestion()}
       return;
     }
-
-    if (!state.answered){
-      const map = { '1':0, '2':1, '3':2, '4':3, 'a':0, 'b':1, 'c':2, 'd':3 };
-      const k = e.key.toLowerCase();
-      if (map[k] !== undefined){
-        const nodes = document.querySelectorAll('.opt');
-        if (nodes[map[k]]) chooseOption(map[k]);
-      }
+    if(!state.answered){
+      const m={'1':0,'2':1,'3':2,'4':3,'a':0,'b':1,'c':2,'d':3};
+      const k=e.key.toLowerCase();
+      if(m[k]!==undefined){const n=document.querySelectorAll('.opt');if(n[m[k]])chooseOption(m[k])}
     }
   });
 }
